@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pizzeria</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    
+    <!-- Barra de navegación -->
+    <nav class="custom-navbar fixed-top">
+        <div class="container">
+            <ul class="nav nav-tabs" id="pizzeriaTabs" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" id="pizzas-tab" data-toggle="tab" href="#pizzas" role="tab" aria-controls="pizzas" aria-selected="true">Pizzas</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="bonealitas-tab" data-toggle="tab" href="#bonealitas" role="tab" aria-controls="bonealitas" aria-selected="false">Boneless & Alitas</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="complementos-tab" data-toggle="tab" href="#complementos" role="tab" aria-controls="complementos" aria-selected="false">Complementos</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="paquetes-tab" data-toggle="tab" href="#paquetes" role="tab" aria-controls="paquetes" aria-selected="false">Paquetes</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+   
+
+    <!-- Contenido de las pestañas -->
+    <div class="tab-content" id="pizzeriaTabsContent">
+        <div class="tab-pane fade show active" id="pizzas" role="tabpanel" aria-labelledby="pizzas-tab">
+            <!-- Contenido de Pizzas -->
+            <div class="container mt-4">
+                <h2 class="text-center mb-4">Pizzas</h2>
+                <div class="row" id="pizza-content">
+                    <!-- Cards de Pizzas se generarán aquí -->
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="bonealitas" role="tabpanel" aria-labelledby="bonealitas-tab">
+            <!-- Contenido de Boneless y Alitas -->
+            <div class="container mt-4">
+                <h2 class="text-center mb-4">Boneless y Alitas</h2>
+                <div class="row" id="bonealitas-content">
+                    <!-- Cards de Pizzas se generarán aquí -->
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="paquetes" role="tabpanel" aria-labelledby="paquetes-tab">
+            <!-- Contenido de Paquetes -->
+            <div class="container mt-4">
+                <h2 class="text-center mb-4">Paquetes</h2>
+                <div class="row" id="paquete-content">
+                    <!-- Cards de Paquetes se generarán aquí -->
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="complementos" role="tabpanel" aria-labelledby="complementos-tab">
+            <!-- Contenido de Complementos -->
+            <div class="container mt-4">
+                <h2 class="text-center mb-4">Complementos</h2>
+                <div class="row" id="complemento-content">
+                    <!-- Cards de Complementos se generarán aquí -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Botón Enviar Pedido mejorado y fijado en la parte inferior -->
+    <div class="fixed-bottom text-center mb-4">
+        <button type="button" 
+                class="btn btn-primary btn-lg rounded-pill shadow-lg px-5" 
+                data-toggle="modal" 
+                data-target="#orderModal" 
+                onclick="reviewOrder()">
+            Enviar Pedido
+        </button>
+    </div>
+
+
+    <br><br>
+
+     <!-- Modal -->
+<div class="modal fade" id="orderModal" tabindex="-1" aria-labelledby="orderModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="orderModalLabel">Confirmar Pedido</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <ul id="orderSummary" class="list-group">
+                    <!-- Resumen del pedido -->
+                </ul>
+                <p class="mt-3"><strong>Total: $<span id="totalPrice">0.00</span></strong></p>
+
+                <!-- Aviso de entrega a domicilio -->
+                <div id="deliveryNotice" class="alert-custom mt-3" style="display: none;">
+                    <i class="fas fa-exclamation-circle mr-2"></i>
+                    La Entrega a Domicilio tiene un costo que depende de la Zona, favor de pasar su Dirección al Confirmar su Pedido.
+                </div>
+
+                <!-- Métodos de pago -->
+                <div class="form-group">
+                    <label for="paymentMethod">Método de Pago</label>
+                    <select class="form-control" id="paymentMethod" onchange="handlePaymentChange()">
+                        <!-- Opciones generadas por JavaScript -->
+                    </select>
+                </div>
+
+                <!-- Método de Entrega -->
+                <div class="form-group mt-3">
+                    <label for="deliveryAddress">Método de Entrega</label>
+                    <select class="form-control" id="deliveryAddress" onchange="handleDeliveryChange()">
+                        <!-- Opciones generadas por JavaScript -->
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary" onclick="sendOrder()">Confirmar Pedido</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+    
+
+    <!-- Modal de Opciones -->
+    <div class="modal fade" id="optionsModal" tabindex="-1" aria-labelledby="optionsModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title" id="optionsModalLabel">Selecciona las opciones</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+            <form id="optionsForm">
+                <!-- Opciones dinámicamente generadas se insertarán aquí -->
+            </form>
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+            <button type="button" class="btn btn-primary" onclick="saveOptions()">Guardar</button>
+            </div>
+        </div>
+        </div>
+    </div>
+
+    <!-- Modal "Crea tu pizza"
+    <div class="modal fade" id="createPizzaModal" tabindex="-1" aria-labelledby="createPizzaModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="createPizzaModalLabel">Crea tu pizza</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <h6>Elige tus ingredientes:</h6>
+                    <div id="ingredientesContainer">
+                        Ingredientes generados dinámicamente aquí
+                    </div>
+
+                    <h6 class="mt-3">Opciones adicionales:</h6>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="orillaRellena">
+                        <label class="form-check-label" for="orillaRellena">
+                            Orilla rellena de queso
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="quesoExtra">
+                        <label class="form-check-label" for="quesoExtra">
+                            Queso extra
+                        </label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-primary" onclick="guardarPizza()">Guardar Pizza</button>
+                </div>
+            </div>
+        </div>
+    </div>
+-->
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
