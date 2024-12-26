@@ -9,68 +9,80 @@
 </head>
 <body>
     
-    <!-- Barra de navegación -->
-    <nav class="custom-navbar fixed-top">
-        <div class="container">
-            <ul class="nav nav-tabs" id="pizzeriaTabs" role="tablist">
-                <li class="nav-item">
-                    <a class="nav-link active" id="pizzas-tab" data-toggle="tab" href="#pizzas" role="tab" aria-controls="pizzas" aria-selected="true">Pizzas</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" id="bonealitas-tab" data-toggle="tab" href="#bonealitas" role="tab" aria-controls="bonealitas" aria-selected="false">Boneless & Alitas</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" id="complementos-tab" data-toggle="tab" href="#complementos" role="tab" aria-controls="complementos" aria-selected="false">Complementos</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" id="paquetes-tab" data-toggle="tab" href="#paquetes" role="tab" aria-controls="paquetes" aria-selected="false">Paquetes</a>
-                </li>
-            </ul>
-        </div>
-    </nav>
+   <!-- Barra de navegación -->
+   <nav class="custom-navbar fixed-top">
+    <div class="container">
+        <ul class="nav nav-tabs" id="pizzeriaTabs" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" id="pizzas-tab" data-toggle="tab" href="#pizzas" role="tab" aria-controls="pizzas" aria-selected="true">Pizzas</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="bonealitas-tab" data-toggle="tab" href="#bonealitas" role="tab" aria-controls="bonealitas" aria-selected="false">Boneless & Alitas</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="complementos-tab" data-toggle="tab" href="#complementos" role="tab" aria-controls="complementos" aria-selected="false">Complementos</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="paquetes-tab" data-toggle="tab" href="#paquetes" role="tab" aria-controls="paquetes" aria-selected="false">Paquetes</a>
+            </li>
+        </ul>
+    </div>
+</nav>
 
-   
 
-    <!-- Contenido de las pestañas -->
-    <div class="tab-content" id="pizzeriaTabsContent">
-        <div class="tab-pane fade show active" id="pizzas" role="tabpanel" aria-labelledby="pizzas-tab">
-            <!-- Contenido de Pizzas -->
-            <div class="container mt-4">
-                <h2 class="text-center mb-4">Pizzas</h2>
-                <div class="row" id="pizza-content">
-                    <!-- Cards de Pizzas se generarán aquí -->
-                </div>
-            </div>
-        </div>
-        <div class="tab-pane fade" id="bonealitas" role="tabpanel" aria-labelledby="bonealitas-tab">
-            <!-- Contenido de Boneless y Alitas -->
-            <div class="container mt-4">
-                <h2 class="text-center mb-4">Boneless y Alitas</h2>
-                <div class="row" id="bonealitas-content">
-                    <!-- Cards de Pizzas se generarán aquí -->
-                </div>
-            </div>
-        </div>
-        <div class="tab-pane fade" id="paquetes" role="tabpanel" aria-labelledby="paquetes-tab">
-            <!-- Contenido de Paquetes -->
-            <div class="container mt-4">
-                <h2 class="text-center mb-4">Paquetes</h2>
-                <div class="row" id="paquete-content">
-                    <!-- Cards de Paquetes se generarán aquí -->
-                </div>
-            </div>
-        </div>
-        <div class="tab-pane fade" id="complementos" role="tabpanel" aria-labelledby="complementos-tab">
-            <!-- Contenido de Complementos -->
-            <div class="container mt-4">
-                <h2 class="text-center mb-4">Complementos</h2>
-                <div class="row" id="complemento-content">
-                    <!-- Cards de Complementos se generarán aquí -->
-                </div>
+
+<!-- Contenido de las pestañas -->
+<div class="tab-content" id="pizzeriaTabsContent">
+    <div class="tab-pane fade show active" id="pizzas" role="tabpanel" aria-labelledby="pizzas-tab">
+        <!-- Contenido de Pizzas -->
+        <div class="container mt-4">
+            <h2 class="text-center mb-4">Pizzas</h2>
+            <div class="row" id="pizza-content">
+                <!-- Cards de Pizzas se generarán aquí -->
             </div>
         </div>
     </div>
+    <div class="tab-pane fade" id="bonealitas" role="tabpanel" aria-labelledby="bonealitas-tab">
+        <!-- Contenido de Boneless y Alitas -->
+        <div class="container mt-4">
+            <h2 class="text-center mb-4">Boneless y Alitas</h2>
+            <div class="row" id="bonealitas-content">
+                <!-- Cards de Pizzas se generarán aquí -->
+            </div>
+        </div>
+    </div>
+    <div class="tab-pane fade" id="paquetes" role="tabpanel" aria-labelledby="paquetes-tab">
+        <!-- Contenido de Paquetes -->
+        <div class="container mt-4">
+            <h2 class="text-center mb-4">Paquetes</h2>
+            <div class="row" id="paquete-content">
+                <!-- Cards de Paquetes se generarán aquí -->
+            </div>
+        </div>
+    </div>
+    <div class="tab-pane fade" id="complementos" role="tabpanel" aria-labelledby="complementos-tab">
+        <!-- Contenido de Complementos -->
+        <div class="container mt-4">
+            <h2 class="text-center mb-4">Complementos</h2>
+            <div class="row" id="complemento-content">
+                <!-- Cards de Complementos se generarán aquí -->
+            </div>
+        </div>
+    </div>
+</div>
 
+<!-- Botón Enviar Pedido mejorado y fijado en la parte inferior -->
+<div class="fixed-bottom text-center mb-4">
+    <button type="button" 
+            class="btn btn-primary btn-lg rounded-pill shadow-lg px-5" 
+            data-toggle="modal" 
+            data-target="#orderModal" 
+            onclick="reviewOrder()">
+        Enviar Pedido
+    </button>
+</div>
+
+    
     <!-- Botón Enviar Pedido mejorado y fijado en la parte inferior -->
     <div class="fixed-bottom text-center mb-4">
         <button type="button" 
@@ -107,21 +119,6 @@
                     La Entrega a Domicilio tiene un costo que depende de la Zona, favor de pasar su Dirección al Confirmar su Pedido.
                 </div>
 
-                <div id="deliveryInputsContainer" style="display: none;">
-                    <div class="form-group">
-                        <label for="calle">Calle</label>
-                        <input type="text" id="calle" class="form-control" placeholder="Calle">
-                    </div>
-                    <div class="form-group">
-                        <label for="colonia">Colonia</label>
-                        <input type="text" id="colonia" class="form-control" placeholder="Colonia">
-                    </div>
-                    <div class="form-group">
-                        <label for="numeroCasa">Número de Casa</label>
-                        <input type="text" id="numeroCasa" class="form-control" placeholder="Número de Casa">
-                    </div>
-                </div>
-                
                 <!-- Métodos de pago -->
                 <div class="form-group">
                     <label for="paymentMethod">Método de Pago</label>
@@ -137,9 +134,24 @@
                         <!-- Opciones generadas por JavaScript -->
                     </select>
                 </div>
+
+                <div id="deliveryInputsContainer" style="display: none;">
+                    <div class="form-group">
+                        <label for="calle">Calle</label>
+                        <input type="text" id="calle" class="form-control" placeholder="Calle">
+                    </div>
+                    <div class="form-group">
+                        <label for="colonia">Colonia y Sector</label>
+                        <input type="text" id="colonia" class="form-control" placeholder="Colonia">
+                    </div>
+                    <div class="form-group">
+                        <label for="numeroCasa">Número de Casa</label>
+                        <input type="text" id="numeroCasa" class="form-control" placeholder="Número de Casa">
+                    </div>
+                </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Regresar</button>
                 <button type="button" class="btn btn-primary" onclick="sendOrder()">Confirmar Pedido</button>
             </div>
         </div>
@@ -164,7 +176,7 @@
             </form>
             </div>
             <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Regresar</button>
             <button type="button" class="btn btn-primary" onclick="saveOptions()">Guardar</button>
             </div>
         </div>
@@ -226,7 +238,7 @@
 
             <!-- Pie del modal -->
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Regresar</button>
                 <button type="button" class="btn btn-primary" onclick="guardarPizza()">Guardar Pizza</button>
             </div>
         </div>

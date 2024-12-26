@@ -43,11 +43,10 @@ const pizzas = [
     { type: "pizza", name: "Pizza de Boneless con Aderezo", img: "imgs/notFound.jpg", price: 175 }, // ????? poner la funcion
     { type: "pizza", name: "Pizza A la Mexicana", img: "imgs/mexicana.jpg", price: 175},
     { type: "pizza", name: "Pizza de Cheetos Flamin Hot", img: "imgs/cheetos.jpg", price: 175 },
-    { type: "pizza", name: "Pizza Vegetariana", img: "imgs/notFound.jpg", price: 175},
+    { type: "pizza", name: "Pizza Vegetariana", img: "imgs/vegetariana.jpg", price: 175},
 
 
 ];
-
 
 const paquetes = [
     { 
@@ -116,6 +115,89 @@ const complementos = [
     { type: "complemento", name: "Refresco Grande 1.75L", img: "imgs/cocacola.jpg", price: 59}
 
 ];
+
+function generateCards(items, containerId, type) {
+    const container = document.getElementById(containerId);
+
+    if (!selectedQuantities[type]) {
+        console.error(`Tipo desconocido: ${type}`);
+        return;
+    }
+
+    let cardsHtml = '';
+
+    // Card especial para crear tu pizza
+    if (type === 'pizzas') {
+        const createPizzaQuantity = customPizzaQuantityValue || 0;
+
+        const createPizzaCard = `
+            <div class="col-sm-6 col-md-4">
+                <div class="card pizza-card">
+                    <img src="imgs/bmo.png" class="card-img-top" alt="Crea tu pizza">
+                    <div class="card-body">
+                        <h5 class="card-title text-center">Crea tu pizza</h5>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="pizza-price">Personalizar</span>
+                            <div class="quantity-control">
+                                <button type="button" class="btn btn-sm btn-outline-secondary" onclick="decreaseCustomPizza()">-</button>
+                                <input type="text" id="quantity-customPizza" class="quantity-input" value="${createPizzaQuantity}" readonly>
+                                <button type="button" class="btn btn-sm btn-outline-secondary" onclick="increaseCustomPizza()">+</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+        cardsHtml += createPizzaCard;
+    }
+
+    // Generar las demás cards
+    cardsHtml += items.map(item => {
+        const selectedQuantity = selectedQuantities[type][item.name] || 0;
+
+        return `
+            <div class="col-sm-6 col-md-4">
+                <div class="card pizza-card">
+                    <img src="${item.img}" class="card-img-top" alt="${item.name}">
+                    <div class="card-body">
+                        <h5 class="card-title text-center">${item.name}</h5>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="pizza-price">$${item.price.toFixed(2)}</span>
+                            <div class="quantity-control">
+                                <button type="button" class="btn btn-sm btn-outline-secondary" onclick="decreaseQuantity('${type}', '${item.name}')">-</button>
+                                <input type="text" id="quantity-${item.name}" class="quantity-input" value="${selectedQuantity}" readonly>
+                                <button type="button" class="btn btn-sm btn-outline-secondary" onclick="increaseQuantity('${type}', '${item.name}')">+</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+    }).join('');
+
+    container.innerHTML = cardsHtml;
+}
+
+// Evento de cambio de pestaña
+$('#pizzeriaTabs a').on('click', function (e) {
+    e.preventDefault();
+    $(this).tab('show');
+
+    switch ($(this).attr('id')) {
+        case 'pizzas-tab':
+            generateCards(pizzas, 'pizza-content', 'pizzas');
+            break;
+        case 'paquetes-tab':
+            generateCards(paquetes, 'paquete-content', 'paquetes');
+            break;
+        case 'bonealitas-tab':
+        generateCards(bonealitas, 'bonealitas-content', 'bonealitas');
+        break;
+        case 'complementos-tab':
+            generateCards(complementos, 'complemento-content', 'complementos');
+            break;
+    }
+});
 
 // Variables para almacenar las cantidades seleccionadas
 const selectedQuantities = {
@@ -277,6 +359,9 @@ function createFormGroup(labelText, inputElement) {
 let globalProductName = '';
 let globalProductType = '';
 
+const pizzasPersonalizadas = []; // Arreglo donde se almacenan las pizzas
+
+const productosOrdenados = [];
 
 
 function increaseQuantity(type, name) {
@@ -312,15 +397,17 @@ function increaseQuantity(type, name) {
         case "pizza":
 
         if (product.name === "Pizza de Boneless con Aderezo") {
-            // Crear select para elegir la salsa
-            const bonelessSauces = ["BBQ", "Buffalo", "Mango Habanero", "Parmesano", "Lemon Pepper"];
-            const sauceSelect = createSelectElement(bonelessSauces, 'bonelessSauce', 'Salsa para los Boneless:');
-            optionsForm.appendChild(sauceSelect);
 
             // Crear select para elegir si los boneless son bañados o naturales
             const bonelessType = ["Bañados", "Naturales"];
             const typeSelect = createSelectElement(bonelessType, 'bonelessType', 'Tipo de Boneless:');
             optionsForm.appendChild(typeSelect);
+            // Crear select para elegir la salsa
+            const bonelessSauces = ["BBQ", "Buffalo", "Mango Habanero", "Parmesano", "Lemon Pepper"];
+            const sauceSelect = createSelectElement(bonelessSauces, 'bonelessSauce', 'Salsa para los Boneless:');
+            optionsForm.appendChild(sauceSelect);
+
+            
 
             hasOptions = true;
         }
@@ -328,21 +415,21 @@ function increaseQuantity(type, name) {
         break;
 
         case "bonealitas":
+            if (product.options.type) {
+                const typeSelect = createSelectElement(product.options.type, 'type', 'Tipo:');
+                optionsForm.appendChild(typeSelect);
+                hasOptions = true;
+            }
             if (product.options) {
                 if (product.options.sauces) {
                     const sauceSelect = createSelectElement(product.options.sauces, 'sauces', 'Salsa:');
                     optionsForm.appendChild(sauceSelect);
                     hasOptions = true;
                 }
-                if (product.options.type) {
-                    const typeSelect = createSelectElement(product.options.type, 'type', 'Tipo:');
-                    optionsForm.appendChild(typeSelect);
-                    hasOptions = true;
-                }
             }
             break;
 
-        case "complemento":
+        case "complemento": // aquiiii poner los de los aderezos 
             if (product.options && product.options.sauces) {
                 const sauceSelect = createSelectElement(product.options.sauces, 'sauces', 'Selecciona un aderezo:');
                 optionsForm.appendChild(sauceSelect);
@@ -357,15 +444,19 @@ function increaseQuantity(type, name) {
             const ingredientSelect = createSelectElement(ingredientes, 'pizzaIngredient', 'Ingrediente de la Pizza:');
             optionsForm.appendChild(ingredientSelect);
 
+
+             // Crear select para elegir si los boneless son bañados o naturales
+             const bonelessType = ["Bañados", "Naturales"];
+             const typeSelect = createSelectElement(bonelessType, 'bonelessType', 'Tipo de Boneless:');
+             optionsForm.appendChild(typeSelect);
+
+
             // Crear select para elegir la salsa
             const bonelessSauces = ["BBQ", "Buffalo", "Mango Habanero", "Parmesano", "Lemon Pepper"];
             const sauceSelect = createSelectElement(bonelessSauces, 'bonelessSauce', 'Salsa para los Boneless:');
             optionsForm.appendChild(sauceSelect);
 
-            // Crear select para elegir si los boneless son bañados o naturales
-            const bonelessType = ["Bañados", "Naturales"];
-            const typeSelect = createSelectElement(bonelessType, 'bonelessType', 'Tipo de Boneless:');
-            optionsForm.appendChild(typeSelect);
+           
 
             hasOptions = true;
         }
@@ -380,24 +471,26 @@ function increaseQuantity(type, name) {
                     optionsForm.appendChild(radioDiv);
                     hasOptions = true;
                     if (productOption.options) {
-                        if (productOption.options.sauces) {
-                            const sauceSelect = createSelectElement(productOption.options.sauces, 'sauces', 'Salsa:');
-                            optionsForm.appendChild(sauceSelect);
-                            hasOptions = true;
-                        }
+                        
                         if (productOption.options.type) {
                             const typeSelect = createSelectElement(productOption.options.type, 'type', 'Tipo:');
                             optionsForm.appendChild(typeSelect);
                             hasOptions = true;
                         }
+                        if (productOption.options.sauces) {
+                            const sauceSelect = createSelectElement(productOption.options.sauces, 'sauces', 'Salsa:');
+                            optionsForm.appendChild(sauceSelect);
+                            hasOptions = true;
+                        }   
                     }
                 }
                 if (productOption.name === "Aderezo A Elegir" && productOption.sauces) {
                     const sauceSelect = createSelectElement(productOption.sauces, 'sauces', 'Salsa:');
-                    optionsForm.appendChild(sauceSelect);
                     const typeOptions = ['Bañados', 'Naturales'];
                     const typeSelect = createSelectElement(typeOptions, 'type', 'Tipo:');
-                    optionsForm.appendChild(typeSelect);                    
+                    optionsForm.appendChild(typeSelect); 
+                    optionsForm.appendChild(sauceSelect);
+                   
                     hasOptions = true;
                 }
             });
@@ -415,8 +508,6 @@ function increaseQuantity(type, name) {
 
 
 
-
-const productosOrdenados = [];
 
 
 // Función para guardar opciones seleccionadas
@@ -514,6 +605,21 @@ function saveOptions() {
             } else {
                 allOptionsSelected = false; // Marcar como incompleto si falta la selección de Boneless o Alitas
             }
+
+                  // Verificación de salsa
+            if (sauceSelect && sauceSelect.value) {
+                selectedOptions.options["Aderezo A Elegir"] = sauceSelect.value;
+            } else {
+                allOptionsSelected = false; // Marcar como incompleto si falta la opción de aderezo
+            }
+
+            // Verificación de tipo
+            if (typeSelect && typeSelect.value) {
+                selectedOptions.options["Tipo"] = typeSelect.value;
+            } else {
+                allOptionsSelected = false; // Marcar como incompleto si falta la opción de tipo
+            }
+
         }
 
         else if (product.name === "Paquete 4") {
@@ -555,12 +661,7 @@ function saveOptions() {
             selectedOptions.price = product.price;
             selectedOptions.img = product.img;
         
-        }
-        
-        
-        
-        
-        else {
+        } else {
              // Verificación de salsa
         if (sauceSelect && sauceSelect.value) {
             selectedOptions.options["Aderezo A Elegir"] = sauceSelect.value;
@@ -589,8 +690,9 @@ function saveOptions() {
 
     // Guardar las opciones en productosOrdenados
     productosOrdenados.push(selectedOptions);
-
+    
     console.log(productosOrdenados);
+
 
 
     updateQuantity(globalProductType, globalProductName, +1);
@@ -613,68 +715,6 @@ function validateForm() {
     } else {
         confirmButton.disabled = true;
     }
-}
-
-function generateCards(items, containerId, type) {
-    const container = document.getElementById(containerId);
-
-    if (!selectedQuantities[type]) {
-        console.error(`Tipo desconocido: ${type}`);
-        return;
-    }
-
-    let cardsHtml = '';
-
-    // Card especial para crear tu pizza
-    if (type === 'pizzas') {
-        const createPizzaQuantity = customPizzaQuantityValue || 0;
-
-        const createPizzaCard = `
-            <div class="col-sm-6 col-md-4">
-                <div class="card pizza-card">
-                    <img src="imgs/bmo.png" class="card-img-top" alt="Crea tu pizza">
-                    <div class="card-body">
-                        <h5 class="card-title text-center">Crea tu pizza</h5>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <span class="pizza-price">Personalizar</span>
-                            <div class="quantity-control">
-                                <button type="button" class="btn btn-sm btn-outline-secondary" onclick="decreaseCustomPizza()">-</button>
-                                <input type="text" id="quantity-customPizza" class="quantity-input" value="${createPizzaQuantity}" readonly>
-                                <button type="button" class="btn btn-sm btn-outline-secondary" onclick="increaseCustomPizza()">+</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        `;
-        cardsHtml += createPizzaCard;
-    }
-
-    // Generar las demás cards
-    cardsHtml += items.map(item => {
-        const selectedQuantity = selectedQuantities[type][item.name] || 0;
-
-        return `
-            <div class="col-sm-6 col-md-4">
-                <div class="card pizza-card">
-                    <img src="${item.img}" class="card-img-top" alt="${item.name}">
-                    <div class="card-body">
-                        <h5 class="card-title text-center">${item.name}</h5>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <span class="pizza-price">$${item.price.toFixed(2)}</span>
-                            <div class="quantity-control">
-                                <button type="button" class="btn btn-sm btn-outline-secondary" onclick="decreaseQuantity('${type}', '${item.name}')">-</button>
-                                <input type="text" id="quantity-${item.name}" class="quantity-input" value="${selectedQuantity}" readonly>
-                                <button type="button" class="btn btn-sm btn-outline-secondary" onclick="increaseQuantity('${type}', '${item.name}')">+</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        `;
-    }).join('');
-
-    container.innerHTML = cardsHtml;
 }
 
 // Función para aumentar la cantidad de pizzas personalizadas
@@ -747,7 +787,6 @@ function updatePreview() {
 }
 
 
-const pizzasPersonalizadas = []; // Arreglo donde se almacenan las pizzas
 
 function calcularPrecioPizza(ingredientesSeleccionados) {
     let precioBase = 0;
@@ -891,26 +930,7 @@ document.addEventListener('DOMContentLoaded', () => {
     $('#createPizzaModal').on('show.bs.modal', reiniciarModalPizza);
 });
 
-// Evento de cambio de pestaña
-$('#pizzeriaTabs a').on('click', function (e) {
-    e.preventDefault();
-    $(this).tab('show');
 
-    switch ($(this).attr('id')) {
-        case 'pizzas-tab':
-            generateCards(pizzas, 'pizza-content', 'pizzas');
-            break;
-        case 'paquetes-tab':
-            generateCards(paquetes, 'paquete-content', 'paquetes');
-            break;
-        case 'bonealitas-tab':
-        generateCards(bonealitas, 'bonealitas-content', 'bonealitas');
-        break;
-        case 'complementos-tab':
-            generateCards(complementos, 'complemento-content', 'complementos');
-            break;
-    }
-});
 
 let selectedPaymentMethod = "";
 let selectedDeliveryMethod = "";
@@ -1014,9 +1034,13 @@ function reviewOrder() {
             li.textContent = `${productQuantity > 1 ? `${productQuantity} ` : ''}${name} de salsa ${optionObject.sauce}`;
         }
 
+
+        console.log(Object.keys(optionObject).length)
+        console.log("baba")
+
         // Para los paquetes
-        if (optionObject['Tipo'] && optionObject['Boneless o Alitas'] && optionObject['Aderezo A Elegir'] && Object.keys(optionObject).length === 4) {
-            li.textContent = `${productQuantity > 1 ? `${productQuantity} ` : ''}${name}: Pizza de Peperoni, ${optionObject['Boneless o Alitas']} ${optionObject['Tipo']} con Salsa ${optionObject['Aderezo A Elegir']} con un ${optionObject['Refresco Grande 1.75L']}`;
+        if (optionObject['Tipo'] && optionObject['Boneless o Alitas'] && optionObject['Aderezo A Elegir'] && Object.keys(optionObject).length === 3) {
+            li.textContent = `${productQuantity > 1 ? `${productQuantity} ` : ''}${name}: Pizza de Peperoni, ${optionObject['Boneless o Alitas']} ${optionObject['Tipo']} con Salsa ${optionObject['Aderezo A Elegir']} con un Refresco Grande 1.75L`;
         } else if (optionObject['Boneless o Alitas'] === undefined && optionObject['Aderezo A Elegir'] && optionObject['Tipo']) {
             li.textContent = `${productQuantity > 1 ? `${productQuantity} ` : ''}${name}: Pizza de Boneless ${optionObject['Tipo']} con Salsa ${optionObject['Aderezo A Elegir']}`;
         }
@@ -1151,15 +1175,29 @@ function handleDeliveryChange() {
     const deliveryAddress = document.getElementById("deliveryAddress").value;
     const deliveryInputsContainer = document.getElementById("deliveryInputsContainer");
     const confirmButton = document.querySelector('.btn-primary');
+    const deliveryNotice = document.getElementById('deliveryNotice');
+
 
     if (deliveryAddress === "Entrega a Domicilio") {
+        deliveryNotice.style.display = 'block';
         deliveryInputsContainer.style.display = "block";
         validateDeliveryInputs();
     } else {
+        deliveryNotice.style.display = 'none';
         deliveryInputsContainer.style.display = "none";
         confirmButton.disabled = false; // Habilitar botón si no es a domicilio
     }
 }
+
+
+
+
+    if (selectedDeliveryMethod === "Entrega a Domicilio") {
+        deliveryNotice.style.display = 'block';
+    } else {
+        deliveryNotice.style.display = 'none';
+    }
+
 
 // Validar en tiempo real los inputs de entrega a domicilio
 document.getElementById("calle").addEventListener("input", validateDeliveryInputs);
@@ -1285,8 +1323,8 @@ function sendOrder() {
             optionDetails = `${optionObject.type} con salsa ${optionObject.sauce}  y un ${optionObject['Refresco Grande 1.75L']}`;
         } else if (optionObject.sauce && Object.keys(optionObject).length === 2) {
             optionDetails = `con salsa ${optionObject.sauce}`;
-        } else if (optionObject['Tipo'] && optionObject['Boneless o Alitas'] && optionObject['Aderezo A Elegir'] && Object.keys(optionObject).length === 4) {
-            optionDetails = `Pizza de Peperoni, ${optionObject['Boneless o Alitas']} ${optionObject['Tipo']} con Salsa ${optionObject['Aderezo A Elegir']} y un ${optionObject['Refresco Grande 1.75L']}`;
+        } else if (optionObject['Tipo'] && optionObject['Boneless o Alitas'] && optionObject['Aderezo A Elegir'] && Object.keys(optionObject).length === 3) {
+            optionDetails = `Pizza de Peperoni, ${optionObject['Boneless o Alitas']} ${optionObject['Tipo']} con Salsa ${optionObject['Aderezo A Elegir']} y un Refresco Grande 1.75L`;
         } else if (optionObject['Boneless o Alitas'] === undefined && optionObject['Aderezo A Elegir'] && optionObject['Tipo']) {
             optionDetails = `Boneless ${optionObject['Tipo']} con Salsa ${optionObject['Aderezo A Elegir']} y un ${optionObject['Refresco Grande 1.75L']}`;
         } else if (name === "Pizza de Boneless con Aderezo"){
@@ -1408,7 +1446,7 @@ function sendOrder() {
         }
 
         // Agregar datos de dirección al mensaje
-        orderMessage += `\nDirección de Entrega:\n    Calle: ${calle}\n    Colonia: ${colonia}\n    Número de Casa: ${numeroCasa}`;
+        orderMessage += `\nDirección de Entrega:\n    Calle: ${calle}\n    Colonia y Sector: ${colonia}\n    Número de Casa: ${numeroCasa}`;
     }
 
 
