@@ -40,7 +40,7 @@ const pizzas = [
     { type: "pizza", name: "Pizza De Trompo", img: "imgs/notFound.jpg", price: 155},
     { type: "pizza", name: "Pizza 3 Carnes", img: "imgs/3carnes.jpg", price: 165},
     { type: "pizza", name: "Pizza Al Pastor", img: "imgs/pizzaAlPastor.jpg", price: 165},
-    { type: "pizza", name: "Pizza de Boneless con Aderezo", img: "imgs/notFound.jpg", price: 175 }, // ????? poner la funcion
+    { type: "pizza", name: "Pizza de Boneless con Aderezo", img: "imgs/notFound.jpg", price: 185 }, // ????? poner la funcion
     { type: "pizza", name: "Pizza A la Mexicana", img: "imgs/mexicana.jpg", price: 175},
     { type: "pizza", name: "Pizza de Cheetos Flamin Hot", img: "imgs/cheetos.jpg", price: 175 },
     { type: "pizza", name: "Pizza Vegetariana", img: "imgs/vegetariana.jpg", price: 175},
@@ -99,7 +99,7 @@ const paquetes = [
 const bonealitas = [
     { type: "bonealitas", name: "Boneless", img: "imgs/boneless.jpg", price: 129, options: { sauces: ["BBQ", "Buffalo", "Mango Habanero", "Parmesano", "Lemon Pepper"], type: ["Bañados", "Naturales"] }},
     { type: "bonealitas", name: "Alitas", img: "imgs/alitas.jpg", price: 129, options: { sauces: ["BBQ", "Buffalo", "Mango Habanero", "Parmesano", "Lemon Pepper"], type: ["Bañados", "Naturales"] }},
-    { type: "bonealitas", name: "1Kg de Boneless", img: "imgs/boneless.jpg", price: 279, options: { sauces: ["BBQ", "Buffalo", "Mango Habanero", "Parmesano", "Lemon Pepper"], type: ["Bañados", "Naturales"] }},
+    { type: "bonealitas", name: "1Kg de Boneless", img: "imgs/boneless2.jpg", price: 279, options: { sauces: ["BBQ", "Buffalo", "Mango Habanero", "Parmesano", "Lemon Pepper"], type: ["Bañados", "Naturales"] }},
     { type: "bonealitas", name: "1Kg de Alitas", img: "imgs/alitas.jpg", price: 279, options: { sauces: ["BBQ", "Buffalo", "Mango Habanero", "Parmesano", "Lemon Pepper"], type: ["Bañados", "Naturales"] }},
 ];
 
