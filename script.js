@@ -78,8 +78,9 @@ const paquetes = [
         price: 219, 
         products: [
             { type: "pizza", name: "Pizza De Boneless (Bañados o Naturales)" },
-            { type: "bebida", name: "Refresco Grande 1.75L" },
-            { type: "complemento", name: "Aderezo A Elegir", sauces: ["BBQ", "Buffalo", "Mango Habanero", "Parmesano", "Lemon Pepper"] }
+            { type: "complemento", name: "Aderezo Ranch", sauces: ["BBQ", "Buffalo", "Mango Habanero", "Parmesano", "Lemon Pepper"] },
+            { type: "bebida", name: "Refresco Grande 1.75L" }
+
         ] 
     },
     { 
@@ -99,7 +100,7 @@ const paquetes = [
 const bonealitas = [
     { type: "bonealitas", name: "Boneless", img: "imgs/boneless.jpg", price: 129, options: { sauces: ["BBQ", "Buffalo", "Mango Habanero", "Parmesano", "Lemon Pepper"], type: ["Bañados", "Naturales"] }},
     { type: "bonealitas", name: "Alitas", img: "imgs/alitas.jpg", price: 129, options: { sauces: ["BBQ", "Buffalo", "Mango Habanero", "Parmesano", "Lemon Pepper"], type: ["Bañados", "Naturales"] }},
-    { type: "bonealitas", name: "1Kg de Boneless", img: "imgs/boneless2.jpg", price: 279, options: { sauces: ["BBQ", "Buffalo", "Mango Habanero", "Parmesano", "Lemon Pepper"], type: ["Bañados", "Naturales"] }},
+    { type: "bonealitas", name: "1Kg de Boneless", img: "imgs/kiloBoneless.jpg", price: 279, options: { sauces: ["BBQ", "Buffalo", "Mango Habanero", "Parmesano", "Lemon Pepper"], type: ["Bañados", "Naturales"] }},
     { type: "bonealitas", name: "1Kg de Alitas", img: "imgs/alitas.jpg", price: 279, options: { sauces: ["BBQ", "Buffalo", "Mango Habanero", "Parmesano", "Lemon Pepper"], type: ["Bañados", "Naturales"] }},
 ];
 
@@ -155,24 +156,35 @@ function generateCards(items, containerId, type) {
     cardsHtml += items.map(item => {
         const selectedQuantity = selectedQuantities[type][item.name] || 0;
 
-        return `
-            <div class="col-sm-6 col-md-4">
-                <div class="card pizza-card">
-                    <img src="${item.img}" class="card-img-top" alt="${item.name}">
-                    <div class="card-body">
-                        <h5 class="card-title text-center">${item.name}</h5>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <span class="pizza-price">$${item.price.toFixed(2)}</span>
-                            <div class="quantity-control">
-                                <button type="button" class="btn btn-sm btn-outline-secondary" onclick="decreaseQuantity('${type}', '${item.name}')">-</button>
-                                <input type="text" id="quantity-${item.name}" class="quantity-input" value="${selectedQuantity}" readonly>
-                                <button type="button" class="btn btn-sm btn-outline-secondary" onclick="increaseQuantity('${type}', '${item.name}')">+</button>
-                            </div>
-                        </div>
+    // Condición para agregar la descripción
+    const description = (item.type == "paquete") 
+    ? `<p class='card-text'>
+        Contiene:
+        <ul>
+            ${item.products.map(product => `<li>${product.name}</li>`).join('')}
+        </ul>
+    </p>` 
+    : '';
+
+    return `
+    <div class="col-sm-6 col-md-4">
+        <div class="card pizza-card">
+            <img src="${item.img}" class="card-img-top" alt="${item.name}">
+            <div class="card-body">
+                <h5 class="card-title text-center">${item.name}</h5>
+                ${description} <!-- Se agrega la descripción con los productos si es un paquete -->
+                <div class="d-flex justify-content-between align-items-center">
+                    <span class="pizza-price">$${item.price.toFixed(2)}</span>
+                    <div class="quantity-control">
+                        <button type="button" class="btn btn-sm btn-outline-secondary" onclick="decreaseQuantity('${type}', '${item.name}')">-</button>
+                        <input type="text" id="quantity-${item.name}" class="quantity-input" value="${selectedQuantity}" readonly>
+                        <button type="button" class="btn btn-sm btn-outline-secondary" onclick="increaseQuantity('${type}', '${item.name}')">+</button>
                     </div>
                 </div>
             </div>
-        `;
+        </div>
+    </div>
+    `;
     }).join('');
 
     container.innerHTML = cardsHtml;
@@ -820,6 +832,7 @@ function guardarPizza() {
     checkboxes.forEach(checkbox => {
         if (checkbox.checked) {
             selectedIngredients.push(checkbox.value);
+
         }
     });
 
@@ -833,13 +846,30 @@ function guardarPizza() {
         return; // Sale de la función y no guarda nada
     }
 
+     // Validar que al menos un ingrediente o una opción adicional esté seleccionada
+     if (selectedIngredients.length === 0) {
+        alert("Debes seleccionar al menos un ingredientes.");
+        return; // Sale de la función
+    }
+
     // Calcular el precio
     let precioBase = calcularPrecioPizza(selectedIngredients);
 
+    let verdad = (precioBase == 99 || precioBase == 129);
+
+    console.log(verdad); // +66    y la otra es +36
+
     // Agregar costo extra por opciones adicionales
     if (orillaRellena) {
-        precioBase += 45; // Orilla rellena
+        if (precioBase == 99){
+            precioBase += 66; // Orilla rellena
+        } else if (precioBase == 129){
+            precioBase += 36; // Orilla rellena
+        } else {
+            precioBase += 45; // Orilla rellena
+        }
     }
+
     if (quesoExtra) {
         precioBase += 45; // Queso extra
     }
@@ -884,8 +914,17 @@ function actualizarPrecioDinamico() {
     // Calcular precio base según la cantidad de ingredientes
     let precioBase = calcularPrecioPizza(selectedIngredients);
 
-    // Sumar costo adicional por opciones extras
-    if (orillaRellena) precioBase += 45;
+    // Agregar costo extra por opciones adicionales
+    if (orillaRellena) {
+        if (precioBase == 99){
+            precioBase += 66; // Orilla rellena
+        } else if (precioBase == 129){
+            precioBase += 36; // Orilla rellena
+        } else {
+            precioBase += 45; // Orilla rellena
+        }
+    }
+
     if (quesoExtra) precioBase += 45;
 
     // Mostrar el precio en el modal
@@ -1035,9 +1074,6 @@ function reviewOrder() {
             // Este es para el aderezo
         }
 
-
-        console.log(Object.keys(optionObject).length)
-        console.log("baba")
 
         // Para los paquetes
         if (optionObject['Tipo'] && optionObject['Boneless o Alitas'] && optionObject['Aderezo A Elegir'] && Object.keys(optionObject).length === 3) {
@@ -1456,7 +1492,7 @@ function sendOrder() {
         }
 
         // Agregar datos de dirección al mensaje
-        orderMessage += `\nDirección de Entrega:\n    Calle: ${calle}\n    Colonia y Sector: ${colonia}\n    Número de Casa: ${numeroCasa}`;
+        orderMessage += `\nDirección:\n    Calle: ${calle}\n    Colonia y Sector: ${colonia}\n    Número de Casa: ${numeroCasa}`;
     }
 
 
@@ -1465,7 +1501,7 @@ let totalText;
 
     // Verificar si la opción de entrega es "Entrega a Domicilio"
     if (deliveryAddress === "Entrega a Domicilio") {
-        orderMessage += `\nTotal: $${totalPrice.toFixed(2)} + Entrega a domicilio`;
+        orderMessage += `\nTotal: $${totalPrice.toFixed(2)} + Envio`;
 
         totalText = ``;
     } else {
