@@ -4,7 +4,6 @@ let customPizzaQuantityValue = 0; // Variable global para la cantidad
 
 
 const ingredientes = [
-    'Queso',
     'Pepperoni',
     'Salami',
     'Tocino',
@@ -35,6 +34,7 @@ const metodosEntrega = [ // ALGO PARA PREGUNTAR
 
 const pizzas = [
     { type: "pizza", name: "Pizza de Pepperoni", img: "imgs/peperoni.jpg", price: 99},
+    { type: "pizza", name: "Pizza de Queso", img: "imgs/pizzaQueso.jpg", price: 99},
     { type: "pizza", name: "Pizza Suprema", img: "imgs/suprema.jpg", price: 185},
     { type: "pizza", name: "Pizza Hawaiana", img: "imgs/hawaiana.jpg", price: 155},
     { type: "pizza", name: "Pizza De Trompo", img: "imgs/notFound.jpg", price: 155},
