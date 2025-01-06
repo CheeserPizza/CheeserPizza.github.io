@@ -14,16 +14,16 @@
     <div class="container">
         <ul class="nav nav-tabs" id="pizzeriaTabs" role="tablist">
             <li class="nav-item">
-                <a class="nav-link active" id="pizzas-tab" data-toggle="tab" href="#pizzas" role="tab" aria-controls="pizzas" aria-selected="true">Pizzas</a>
+                <a class="nav-link active" id="pizzas-tab" data-toggle="tab" href="#pizza" role="tab" aria-controls="pizza" aria-selected="true">Pizzas</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" id="bonealitas-tab" data-toggle="tab" href="#bonealitas" role="tab" aria-controls="bonealitas" aria-selected="false">Boneless & Alitas</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" id="complementos-tab" data-toggle="tab" href="#complementos" role="tab" aria-controls="complementos" aria-selected="false">Complementos</a>
+                <a class="nav-link" id="complementos-tab" data-toggle="tab" href="#complemento" role="tab" aria-controls="complemento" aria-selected="false">Complementos</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" id="paquetes-tab" data-toggle="tab" href="#paquetes" role="tab" aria-controls="paquetes" aria-selected="false">Paquetes</a>
+                <a class="nav-link" id="paquetes-tab" data-toggle="tab" href="#paquete" role="tab" aria-controls="paquete" aria-selected="false">Paquetes</a>
             </li>
         </ul>
     </div>
@@ -33,7 +33,7 @@
 
 <!-- Contenido de las pestañas -->
 <div class="tab-content" id="pizzeriaTabsContent">
-    <div class="tab-pane fade show active" id="pizzas" role="tabpanel" aria-labelledby="pizzas-tab">
+    <div class="tab-pane fade show active" id="pizza" role="tabpanel" aria-labelledby="pizzas-tab">
         <!-- Contenido de Pizzas -->
         <div class="container mt-4">
             <h2 class="text-center mb-4">Pizzas</h2>
@@ -51,7 +51,7 @@
             </div>
         </div>
     </div>
-    <div class="tab-pane fade" id="paquetes" role="tabpanel" aria-labelledby="paquetes-tab">
+    <div class="tab-pane fade" id="paquete" role="tabpanel" aria-labelledby="paquetes-tab">
         <!-- Contenido de Paquetes -->
         <div class="container mt-4">
             <h2 class="text-center mb-4">Paquetes</h2>
@@ -60,7 +60,7 @@
             </div>
         </div>
     </div>
-    <div class="tab-pane fade" id="complementos" role="tabpanel" aria-labelledby="complementos-tab">
+    <div class="tab-pane fade" id="complemento" role="tabpanel" aria-labelledby="complementos-tab">
         <!-- Contenido de Complementos -->
         <div class="container mt-4">
             <h2 class="text-center mb-4">Complementos</h2>
@@ -71,18 +71,7 @@
     </div>
 </div>
 
-<!-- Botón Enviar Pedido mejorado y fijado en la parte inferior -->
-<div class="fixed-bottom text-center mb-4">
-    <button type="button" 
-            class="btn btn-primary btn-lg rounded-pill shadow-lg px-5" 
-            data-toggle="modal" 
-            data-target="#orderModal" 
-            onclick="reviewOrder()">
-        Enviar Pedido
-    </button>
-</div>
 
-    
     <!-- Botón Enviar Pedido mejorado y fijado en la parte inferior -->
     <div class="fixed-bottom text-center mb-4">
         <button type="button" 
@@ -90,7 +79,7 @@
                 data-toggle="modal" 
                 data-target="#orderModal" 
                 onclick="reviewOrder()">
-            Enviar Pedido
+            Revisar Pedido
         </button>
     </div>
 
@@ -249,7 +238,7 @@
 
 
 
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="script.js"></script>
