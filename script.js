@@ -22,7 +22,7 @@ const opcionesAdicionales = {
     quesoExtra: false     // Queso extra
 };
 
-const metodosDePago = ['Efectivo', 'Transferencia Bancaria'];
+const metodosDePago = ['Efectivo', 'Transferencia Bancaria', 'Tarjeta Credito o Debito'];
 
 const metodosEntrega = [ // ALGO PARA PREGUNTAR
     { metodosEntrega: 'Paso por el Pedido', precioEnvio: 0},
@@ -1242,31 +1242,53 @@ function populatePaymentAndDeliveryOptions() {
     });
 
     // Show or hide delivery notice based on selected delivery method
-    handleDeliveryChange();
+    handleOptionsChange();
 }
+
 
 // Event handler for payment method change
-function handlePaymentChange() {
-    const paymentMethodSelect = document.getElementById('paymentMethod');
-    selectedPaymentMethod = paymentMethodSelect.value;
-}
 
-
-function handleDeliveryChange() {
+function handleOptionsChange() {
+    const paymentMethod = document.getElementById("paymentMethod").value;
     const deliveryAddress = document.getElementById("deliveryAddress").value;
+    const deliveryNotice = document.getElementById("deliveryNotice");
     const deliveryInputsContainer = document.getElementById("deliveryInputsContainer");
+    const paymentInputContainer = document.getElementById("paymentInputContainer");
     const confirmButton = document.querySelector('.btn-primary');
-    const deliveryNotice = document.getElementById('deliveryNotice');
 
+    // Reiniciar mensajes y campos adicionales
+    deliveryNotice.style.display = "none";
+    deliveryNotice.textContent = "";
+    paymentInputContainer.style.display = "none";
+    deliveryInputsContainer.style.display = "none";
 
+    let noticeMessage = "";
+
+    // Entrega a domicilio
     if (deliveryAddress === "Entrega a Domicilio") {
-        deliveryNotice.style.display = 'block';
+        noticeMessage = "La Entrega a Domicilio tiene un costo que depende de la Zona.";
         deliveryInputsContainer.style.display = "block";
         validateDeliveryInputs();
-    } else {
-        deliveryNotice.style.display = 'none';
-        deliveryInputsContainer.style.display = "none";
-        confirmButton.disabled = false; // Habilitar botón si no es a domicilio
+    } 
+
+    // Pago con tarjeta
+    if (paymentMethod === "Tarjeta Credito o Debito") {
+        if (deliveryAddress === "Entrega a Domicilio") {
+            noticeMessage += " Se le enviará una terminal a la casa.";
+        } else {
+            noticeMessage = "Se le enviará una terminal a la casa.";
+        }
+    }
+
+    // Pago en efectivo
+    if (paymentMethod === "Efectivo") {
+        paymentInputContainer.style.display = "block";
+    }
+
+    // Mostrar el mensaje si hay algo que mostrar
+    if (noticeMessage) {
+        deliveryNotice.style.display = "block";
+        deliveryNotice.textContent = noticeMessage;
     }
 }
 
@@ -1282,11 +1304,12 @@ function validateDeliveryInputs() {
 
     // Deshabilitar botón si algún campo está vacío
     if (colonia && numeroCasa) {
-        confirmButton.disabled = false;
+       // confirmButton.disabled = false;
     } else {
-        confirmButton.disabled = true;
+       // confirmButton.disabled = true;
     }
 }
+
 
 // Llamar populatePaymentAndDeliveryOptions al abrir el modal
 $('#orderModal').on('show.bs.modal', populatePaymentAndDeliveryOptions);
@@ -1487,8 +1510,26 @@ function sendOrder() {
     const paymentMethod = document.getElementById('paymentMethod')?.value;
     const deliveryAddress = document.getElementById('deliveryAddress')?.value;
 
-    
+    let paymentInputContainerval = document.getElementById("cashAmount")?.value;
+    paymentInputContainerval = parseFloat(paymentInputContainerval);  // Convert to a number
 
+    const paymentInputContainer = document.getElementById("paymentInputContainer");
+
+
+    console.log(paymentInputContainerval);
+    if (paymentInputContainer.style.display === "block") {
+        if (isNaN(paymentInputContainerval)) {
+            alert("Por favor, ingresa una cantidad válida con la que pagará.");
+            return; // Evitar que se envíe el pedido
+        }
+    
+        if (paymentInputContainerval < totalPrice) {
+            alert(
+                `La cantidad ingresada (${paymentInputContainerval.toFixed(2)}$) no es suficiente para cubrir el total de la compra (${totalPrice.toFixed(2)}$).`
+            );
+            return; // Evitar que se envíe el pedido
+        }
+    }
 
      // Validar si los campos de opciones están seleccionados
      if (!paymentMethod) {
@@ -1513,6 +1554,8 @@ function sendOrder() {
     // Agregar método de pago y dirección al mensaje
     orderMessage += `\nMétodo de Pago: ${paymentMethod || 'No especificado'}`;
     orderMessage += `\nMétodo de Entrega: ${deliveryAddress || 'No especificada'}`;
+
+    
 
     if (deliveryAddress === "Entrega a Domicilio") {
         const colonia = document.getElementById("colonia").value.trim();
@@ -1541,6 +1584,11 @@ function sendOrder() {
         // Usar solo el total sin costos adicionales
         orderMessage += `\nTotal: $${totalPrice.toFixed(2)}`;
     }
+
+    if (paymentMethod === "Efectivo" && !isNaN(paymentInputContainerval)) {
+        orderMessage += `\nPaga con: $${paymentInputContainerval.toFixed(2)}`;
+    }
+
 
     // Agregar el precio total al mensaje
     const whatsappNumber = '8142661510'; // Reemplaza con tu número de WhatsApp
