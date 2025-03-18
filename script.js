@@ -152,22 +152,23 @@ function generateCards(items, containerId, type) {
         const createPizzaQuantity = customPizzaQuantityValue || 0;
 
         const createPizzaCard = `
-            <div class="col-sm-6 col-md-4">
-                <div class="card pizza-card">
-                    <img src="imgs/bmo.png" class="card-img-top" alt="Crea tu pizza">
-                    <div class="card-body">
-                        <h5 class="card-title text-center">Crea tu pizza</h5>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <span class="pizza-price">Personalizar</span>
-                            <div class="quantity-control">
-                                <button type="button" class="btn btn-sm btn-outline-secondary" onclick="decreaseCustomPizza()">-</button>
-                                <input type="text" id="quantity-customPizza" class="quantity-input" value="${createPizzaQuantity}" readonly>
-                                <button type="button" class="btn btn-sm btn-outline-secondary" onclick="increaseCustomPizza()">+</button>
-                            </div>
+        <div class="col-sm-6 col-md-4">
+            <div class="card pizza-card" onclick="increaseCustomPizza()">
+                <img src="imgs/bmo.png" class="card-img-top" alt="Crea tu pizza">
+                <div class="card-body">
+                    <h5 class="card-title text-center">Crea tu pizza</h5>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="pizza-price">Personalizar</span>
+                        <div class="quantity-control">
+                            <button type="button" class="btn btn-sm btn-outline-secondary" onclick="event.stopPropagation(); decreaseCustomPizza()">-</button>
+                            <input type="text" id="quantity-customPizza" class="quantity-input" value="${createPizzaQuantity}" readonly>
+                            <button type="button" class="btn btn-sm btn-warning increase-btn" onclick="event.stopPropagation(); increaseCustomPizza()">+</button>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
+
         `;
         cardsHtml += createPizzaCard;
     }
