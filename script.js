@@ -34,6 +34,10 @@ const pizzas = [
 
     { id: "pizza-queso", type: "pizza", id: "queso", name: "Pizza de Queso", img: "imgs/pizzaQueso.jpg", price: 99 },
     
+    { id: "pizza-peperoniExtra", type: "pizza", id: "extrapeperoni", name: "Pizza de Extra Pepperoni", img: "imgs/extrapeperoni.jpg", price: 129 },
+
+    { id: "pizza-peperoniExtra", type: "pizza", id: "mitamita", name: "1/2 Peperoni 1/2 Queso ", img: "imgs/pizzamitamita.jpeg", price: 109 },
+
     { id: "pizza-suprema", type: "pizza", id: "suprema", name: "Pizza Suprema", img: "imgs/suprema.jpg", price: 179 },
     
     { id: "pizza-hawaiana", type: "pizza", id: "hawaiana", name: "Pizza Hawaiana", img: "imgs/hawaiana.jpg", price: 159 },
@@ -61,7 +65,8 @@ const paquetes = [
         img: "imgs/paquete1.jpg", 
         price: 259, 
         products: [
-            { type: "pizza", name: "Pizza 1 Ingrediente", options: { ingredients: ingredientes } },
+            { type: "pizza", name: "Pizza de Peperoni"},
+           // { type: "pizza", name: "Pizza 1 Ingrediente", options: { ingredients: ingredientes } },
            // { type: "bonealitas", name: "Boneless o Alitas", options: { sauces: ["BBQ", "Buffalo", "Mango Habanero", "Parmesano", "Lemon Pepper"], type: ["Bañados", "Naturales"] }},
             { type: "bonealitas", name: "Boneless", options: { sauces: ["BBQ", "Buffalo", "Mango Habanero", "Parmesano", "Lemon Pepper"], type: ["Bañados", "Naturales"] } },
             { type: "bebida", name: "Refresco Grande 1.75L" }
@@ -74,7 +79,8 @@ const paquetes = [
         img: "imgs/paquete2.jpg", 
         price: 189, 
         products: [
-            { type: "pizza", name: "Pizza 1 Ingrediente", options: { ingredients: ingredientes } },
+            { type: "pizza", name: "Pizza de Peperoni"},
+            //{ type: "pizza", name: "Pizza 1 Ingrediente", options: { ingredients: ingredientes } },
             { type: "complementos", name: "Espagueti Sencillo" },
             { type: "bebida", name: "Refresco Grande 1.75L" }
         ] 
@@ -97,11 +103,12 @@ const paquetes = [
         name: "Paquete 4", 
         id: "paquete-4",
         img: "imgs/paquete4.jpg", 
-        price: 309, 
+        price: 299, 
         products: [
-            { type: "pizza", name: "Pizza 1 Ingrediente", options: { ingredients: ingredientes } },
-            { type: "complementos", name: "Espagueti Sencillo" },
-            { type: "boneless", name: "Boneless", options: { sauces: ["BBQ", "Buffalo", "Mango Habanero", "Parmesano", "Lemon Pepper"], type: ["Bañados", "Naturales"] }},
+            //{ type: "pizza", name: "Pizza 1 Ingrediente", options: { ingredients: ingredientes } },
+            { type: "pizza", name: "2 Pizzas de Peperoni con Extra Queso"},
+            //{ type: "complementos", name: "Espagueti Sencillo" },
+           // { type: "boneless", name: "Boneless", options: { sauces: ["BBQ", "Buffalo", "Mango Habanero", "Parmesano", "Lemon Pepper"], type: ["Bañados", "Naturales"] }},
             { type: "bebida", name: "Refresco Grande 1.75L" }
         ] 
     }
@@ -466,36 +473,40 @@ function increaseQuantity(type, name) { //name es el id para que no refactorice 
 
         if (product.name === "Paquete 4") {
             // Crear select para elegir el ingrediente de la pizza
-            const ingredientSelect = createSelectElement(ingredientes, 'pizzaIngredient', 'Ingrediente de la Pizza:');
-            optionsForm.appendChild(ingredientSelect);
+           // const ingredientSelect = createSelectElement(ingredientes, 'pizzaIngredient', 'Ingrediente de la Pizza:');
+            //optionsForm.appendChild(ingredientSelect);
 
 
              // Crear select para elegir si los boneless son bañados o naturales
-             const bonelessType = ["Bañados", "Naturales"];
-             const typeSelect = createSelectElement(bonelessType, 'bonelessType', 'Tipo de Boneless:');
-             optionsForm.appendChild(typeSelect);
+            // const bonelessType = ["Bañados", "Naturales"];
+            // const typeSelect = createSelectElement(bonelessType, 'bonelessType', 'Tipo de Boneless:');
+            // optionsForm.appendChild(typeSelect);
 
 
             // Crear select para elegir la salsa
-            const bonelessSauces = ["BBQ", "Buffalo", "Mango Habanero", "Parmesano", "Lemon Pepper"];
-            const sauceSelect = createSelectElement(bonelessSauces, 'bonelessSauce', 'Salsa para los Boneless:');
-            optionsForm.appendChild(sauceSelect);
+           // const bonelessSauces = ["BBQ", "Buffalo", "Mango Habanero", "Parmesano", "Lemon Pepper"];
+           // const sauceSelect = createSelectElement(bonelessSauces, 'bonelessSauce', 'Salsa para los Boneless:');
+           // optionsForm.appendChild(sauceSelect);
 
            
 
-            hasOptions = true;
-            break;
+           // hasOptions = true;
+            //break;
+        }   
+
+        if (product.name === "Paquete 2") {
+
         }
 
             product.products.forEach(productOption => {
             
-                if (productOption.name === "Pizza 1 Ingrediente") {
+           /*     if (productOption.name === "Pizza 1 Ingrediente") {
                     const ingredientSelect = createSelectElement(ingredientes, 'pizzaIngredient', 'Ingrediente de la Pizza:');
                     optionsForm.appendChild(ingredientSelect); 
                 
                     hasOptions = true;
 
-                }
+                }*/
                 
 
                 if (productOption.name === "Boneless") {
@@ -667,12 +678,14 @@ function saveOptions() {
         // Verificación de Boneless o Alitas
         if(product.name == "Paquete 1"){
          
+            selectedOptions.options["Paquete1"] = product.name;
+
              // Validar y guardar el ingrediente de la pizza
-             if (pizzaIngredientSelect && pizzaIngredientSelect.value) {
+       /*      if (pizzaIngredientSelect && pizzaIngredientSelect.value) {
                 selectedOptions.options["Pizza 1 Ingrediente"] = pizzaIngredientSelect.value;
             } else {
                 allOptionsSelected = false; // Marcar como incompleto si falta el ingrediente de la pizza
-            }
+            }*/
         
 
             /*
@@ -701,17 +714,18 @@ function saveOptions() {
 
         // Verificación de Boneless o Alitas
         if(product.name == "Paquete 2"){
-         
-            // Validar y guardar el ingrediente de la pizza
-            if (pizzaIngredientSelect && pizzaIngredientSelect.value) {
-               selectedOptions.options["Pizza 1 Ingrediente"] = pizzaIngredientSelect.value;
-           } else {
-               allOptionsSelected = false; // Marcar como incompleto si falta el ingrediente de la pizza
-           }
-       
-       }
+        
+            
+         }
 
-        else if (product.name === "Paquete 4") {
+       if (product.name === "Paquete 3"){
+        selectedOptions.options["Paquete3"] = product.name;
+       }
+       
+        if (product.name === "Paquete 4") {
+
+            selectedOptions.options["Paquete4"] = product.name;
+
             // Obtener los selectores de las opciones del cliente
             const bonelessSauceSelect = document.querySelector('select[name="bonelessSauce"]');
             const bonelessTypeSelect = document.querySelector('select[name="bonelessType"]');
@@ -749,13 +763,17 @@ function saveOptions() {
             selectedOptions.price = product.price;
             selectedOptions.img = product.img;
         
-        } else {
+        } 
+        
+        else {
              // Verificación de salsa
         if (sauceSelect && sauceSelect.value) {
             selectedOptions.options["Aderezo A Elegir"] = sauceSelect.value;
         } else {
             allOptionsSelected = false; // Marcar como incompleto si falta la opción de aderezo
         }
+
+
 
         // Verificación de tipo
         if (typeSelect && typeSelect.value) {
@@ -1076,7 +1094,8 @@ function reviewOrder() {
             if (titleElement && priceElement) {
                 const pizza = titleElement.textContent;
                 const price = parseFloat(priceElement.textContent.replace('$', ''));
-                    
+                  
+                
                 if (pizza == "Crea tu pizza"){
                     
                 } else {
@@ -1114,17 +1133,37 @@ function reviewOrder() {
 
     // Mostrar pizzas seleccionadas sin opciones
     filteredPizzas.forEach(pizza => {
+
+       
+
         const pizzaTotalPrice = pizza.quantity * pizza.price;
         totalPrice += pizzaTotalPrice;
         const li = document.createElement('li');
         li.className = 'list-group-item d-flex justify-content-between align-items-center';
-        li.textContent = `${pizza.quantity} ${pizza.name}`;
+        
+        
+console.log(pizza)
+        if (pizza.name == "Paquete 2"){
+        li.textContent = `${pizza.quantity > 1 ? `${pizza.quantity} ` : '1 '}${pizza.name}: Pizza de Peperoni, un Espagueti Sencillo y un Refresco Grande 1.75L`;
+
+        } else if (pizza.name == "Paquete 4") {
+            li.textContent = `${pizza.quantity > 1 ? `${pizza.quantity} ` : '1 '}${pizza.name}: 2 Pizzas de Peperoni con Extra Queso y un Refresco Grande 1.75L`;
+        }
+
+        else{
+            li.textContent = `${pizza.quantity} ${pizza.name}`;
+        }
+
         const span = document.createElement('span');
         span.className = 'badge badge-primary badge-pill';
         span.textContent = `$${pizzaTotalPrice.toFixed(2)}`;
         li.appendChild(span);
         orderSummary.appendChild(li);
     });
+
+    console.log(filteredPizzas);
+
+    
 
     // Mostrar productos ordenados con opciones
     productosOrdenados.forEach(product => {
@@ -1154,50 +1193,18 @@ function reviewOrder() {
             // Este es para el aderezo
         }
 
-console.log(optionObject)
         // Para los paquetes
-        if (optionObject['Aderezo A Elegir'] && optionObject['Tipo'] && optionObject['Pizza 1 Ingrediente'] ) { // Paquete 1
-            li.textContent = `${productQuantity > 1 ? `${productQuantity} ` : ''}${name}: Pizza de ${optionObject['Pizza 1 Ingrediente']}, Boneless ${optionObject['Tipo']} con Salsa ${optionObject['Aderezo A Elegir']} y un Refresco Grande 1.75L`; //Paquete 3
+        if (optionObject['Paquete1']) { // Paquete 1
+            li.textContent = `${productQuantity > 1 ? `${productQuantity} ` : ''}${name}: Pizza de Peperoni, Boneless ${optionObject['Tipo']} con Salsa ${optionObject['Aderezo A Elegir']} y un Refresco Grande 1.75L`; //Paquete 3
        
-        } else if (optionObject['Boneless o Alitas'] === undefined && optionObject['Aderezo A Elegir'] === undefined && optionObject['Tipo'] === undefined && optionObject['Pizza 1 Ingrediente'] ) { // Paquete 2
-            li.textContent = `${productQuantity > 1 ? `${productQuantity} ` : ''}${name}: Pizza de ${optionObject['Pizza 1 Ingrediente']}, un Espagueti Sencillo y un Refresco Grande 1.75L`;
-        } else if (optionObject['Aderezo A Elegir'] && optionObject['Tipo']) {
+        } else if (product.name == "Paquete 2") { // Paquete 2
+
+        } else if (optionObject['Paquete3'] ) {
             li.textContent = `${productQuantity > 1 ? `${productQuantity} ` : ''}${name}: Pizza de Boneless ${optionObject['Tipo']} con Salsa ${optionObject['Aderezo A Elegir']} un Aderezo Ranch y un Refresco Grande 1.75L`; //Paquete 3
         }  
 
         if (product.name == "Paquete 4") {
-            // Construir los detalles de cada producto en el paquete
-            const productosDelPaquete = product.products.map(prod => {
-                if (prod.type === 'pizza') {
-                    // Para pizza, incluir el ingrediente
-                    return `Pizza de ${prod.options.Ingrediente}`;
-                } else if (prod.type === 'boneless') {
-                    // Para boneless, incluir la salsa y el tipo
-                    return `${prod.name} con Salsa ${prod.options.Salsa}, Tipo ${prod.options.Tipo}`;
-                } else {
-                    // Para otros productos, simplemente mostrar el nombre
-                    return prod.name;
-                }
-            }).join(', '); // Unir todos los productos con comas
-        
-            // Mostrar el texto en el contenido de la lista
-            li.textContent = `${productQuantity > 1 ? `${productQuantity} ` : ''}${name}: ${productosDelPaquete}`;
-        }
-
-
-        if (product.name == "Pizza de Boneless con Aderezo") {
-            // Construir los detalles de cada producto en el paquete
-            const productosDelPaquete = product.products.map(prod => {
-                if (prod.type === 'boneless') {
-                    // Para boneless, incluir la salsa y el tipo
-                    return `${prod.name} ${prod.options.Tipo} con Salsa ${prod.options.Salsa} y con Aderezo Ranch Aparte`;
-                } else {
-                    return prod.name;
-                }
-            }).join(', '); // Unir todos los productos con comas
-        
-            // Mostrar el texto en el contenido de la lista
-            li.textContent = `${productQuantity > 1 ? `${productQuantity} ` : ''} ${productosDelPaquete}`;
+          
         }
         
         
@@ -1428,6 +1435,8 @@ function sendOrder() {
             orderMessage += `${pizza.quantity} Paquete 2: Una Pizza de Peperoni, Un Espagueti Sencillo y un Refresco Grande 1.75L\n`;
         } else if (pizza.name === "Crea tu pizza") {
             // para ahorrar problemas
+        } else if (pizza.name === "Paquete 4") {
+            orderMessage += `${pizza.quantity} Paquete 4: 2 Pizzas de Peperoni con Extra Queso y un Refresco Grande 1.75L\n`;
         } else {
             orderMessage += `${pizza.quantity} ${pizza.name}\n`;
         }
@@ -1449,11 +1458,11 @@ function sendOrder() {
         } else if (optionObject.sauce && Object.keys(optionObject).length === 2) {
             optionDetails = `con salsa ${optionObject.sauce}`;
         } 
-        else if (optionObject['Aderezo A Elegir'] && optionObject['Tipo'] && optionObject['Pizza 1 Ingrediente'] ) { // Paquete 1
-            optionDetails = `Pizza de ${optionObject['Pizza 1 Ingrediente']}, Con Boneless ${optionObject['Tipo']} con Salsa ${optionObject['Aderezo A Elegir']} y un Refresco Grande 1.75L`; //Paquete 3
+        else if (optionObject['Aderezo A Elegir'] && optionObject['Tipo'] ) { // Paquete 1
+            optionDetails = `Pizza de Peperoni, Con Boneless ${optionObject['Tipo']} con Salsa ${optionObject['Aderezo A Elegir']} y un Refresco Grande 1.75L`; //Paquete 3
        
-        } else if (optionObject['Boneless o Alitas'] === undefined && optionObject['Aderezo A Elegir'] === undefined && optionObject['Tipo'] === undefined && optionObject['Pizza 1 Ingrediente'] ) { // Paquete 2
-            optionDetails = `Pizza de ${optionObject['Pizza 1 Ingrediente']}, un Espagueti Sencillo y un Refresco Grande 1.75L`;
+        } else if (optionObject['Boneless o Alitas'] === undefined && optionObject['Aderezo A Elegir'] === undefined && optionObject['Tipo'] === undefined) { // Paquete 2
+            optionDetails = `Pizza de Peperoni, un Espagueti Sencillo y un Refresco Grande 1.75L`;
         
         } else if (optionObject['Aderezo A Elegir'] && optionObject['Tipo']) { 
             optionDetails = `Pizza de Boneless ${optionObject['Tipo']} con Salsa ${optionObject['Aderezo A Elegir']}  un Aderezo Ranch y un ${optionObject['Refresco Grande 1.75L']}`; //PAQUETE 3
@@ -1487,7 +1496,7 @@ function sendOrder() {
            
                // Añadir los detalles al mensaje, verificando que existan
                if (pizza) {
-                   orderMessage += `    - Pizza 1 Ingrediente: ${pizza.options?.Ingrediente || "Ingrediente no seleccionado"}\n`;
+                   orderMessage += `    - Pizza de Peperoni\n`;
                }
            
                if (complemento) {
