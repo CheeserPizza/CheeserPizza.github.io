@@ -173,71 +173,74 @@
     </div>
 
   <!-- Modal para crear tu pizza -->
-  <div id="customPizzaModalContainer">
-
-<div class="modal fade" id="createPizzaModal" tabindex="-1" aria-labelledby="createPizzaModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <!-- Encabezado del modal -->
-            <div class="modal-header bg-primary text-white">
-                <h5 class="modal-title" id="createPizzaModalLabel">Personaliza tu Pizza</h5>
-                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-
-            <!-- Cuerpo del modal -->
-            <div class="modal-body">
-                <form>
-                    <!-- Ingredientes -->
-                    <div class="form-group">
-                        <label class="font-weight-bold">Elige tus ingredientes:</label>
-                        <div class="d-flex flex-wrap" id="ingredientesContainer">
-                            <!-- Ingredientes dinámicos generados con JS -->
-                       </div>
+     <!-- Modal para crear tu pizza -->
+     <div id="customPizzaModalContainer">
+        <div class="modal fade" id="createPizzaModal" tabindex="-1" aria-labelledby="createPizzaModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <!-- Encabezado del modal -->
+                    <div class="modal-header bg-primary text-white">
+                        <h5 class="modal-title" id="createPizzaModalLabel">Personaliza tu Pizza</h5>
+                        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
                     </div>
 
-                    <!-- Opciones adicionales -->
-                    <div class="form-group">
-                        <label class="font-weight-bold">Extras:</label>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="orillaRellena">
-                            <label class="form-check-label" for="orillaRellena">Orilla Rellena</label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="quesoExtra">
-                            <label class="form-check-label" for="quesoExtra">Queso Extra</label>
-                        </div>
+                    <!-- Cuerpo del modal -->
+                    <div class="modal-body">
+                        <form>
+                            <!-- Contenedor de especialidades -->
+                            <div class="form-group">
+                                <label class="font-weight-bold">Elige una especialidad:</label>
+                                <div id="especialidadesContainer" class="d-flex flex-wrap">
+                                    <!-- Especialidades dinámicas generadas con JS -->
+                                </div>
+                            </div>
+                            
+                            <!-- Ingredientes -->
+                            <div class="form-group">
+                                <label class="font-weight-bold">Elige tus ingredientes:</label>
+                                <div class="d-flex flex-wrap" id="ingredientesContainer">
+                                    <!-- Ingredientes dinámicos generados con JS -->
+                                </div>
+                            </div>
+
+                            <!-- Opciones adicionales -->
+                            <div class="form-group">
+                                <label class="font-weight-bold">Extras:</label>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="orillaRellena">
+                                    <label class="form-check-label" for="orillaRellena">Orilla Rellena</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="quesoExtra">
+                                    <label class="form-check-label" for="quesoExtra">Queso Extra</label>
+                                </div>
+                            </div>
+
+                            <!-- Vista previa -->
+                            <div class="form-group">
+                                <label class="font-weight-bold">Vista previa:</label>
+                                <textarea class="form-control" id="previewPizza" rows="3" placeholder="Aquí se mostrarán tus selecciones..." readonly></textarea>
+                            </div>
+                        </form>
                     </div>
 
-                    <!-- Vista previa -->
-                    <div class="form-group">
-                        <label class="font-weight-bold">Vista previa:</label>
-                        <textarea class="form-control" id="previewPizza" rows="3" placeholder="Aquí se mostrarán tus selecciones..." readonly></textarea>
+                    <!-- Contenedor del precio -->
+                    <div class="d-flex justify-content-between mt-3 px-3">
+                        <strong>Precio Final:</strong>
+                        <span id="precioFinal" class="text-success">$0.00</span>
                     </div>
-                </form>
-            </div>
 
-            <!-- Contenedor del precio -->
-<div class="d-flex justify-content-between mt-3">
-    <strong>Precio Final:</strong>
-    <span id="precioFinal" class="text-success">$0.00</span>
-</div>
-
-
-            <!-- Pie del modal -->
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Regresar</button>
-                <button type="button" class="btn btn-primary" onclick="guardarPizza()">Guardar Pizza</button>
+                    <!-- Pie del modal -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Regresar</button>
+                        <button type="button" class="btn btn-primary" onclick="guardarPizza()">Guardar Pizza</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-</div>
-</div>
-
-
-
-
     
 
 
