@@ -813,4 +813,175 @@ nav {
     margin-bottom: 15px;
 }
 
+/* Estilos para ingredientes con ubicación en el modal de crear pizza */
+#customPizzaModalContainer #ingredientesContainer {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 12px;
+    margin-top: 15px;
+}
+
+.ingrediente-item {
+    background: #ffffff;
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    padding: 12px 15px;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    cursor: pointer;
+}
+
+.ingrediente-item:hover {
+    border-color: #007bff;
+    box-shadow: 0 4px 8px rgba(0,123,255,0.15);
+}
+
+.ingrediente-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+}
+
+.ingrediente-name {
+    font-weight: 600;
+    font-size: 1rem;
+    color: #333;
+    flex: 1;
+}
+
+.ubicacion-icons {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.ubicacion-icon-btn {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #d0d0d0;
+    background: #f8f9fa;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    padding: 0;
+    color: #666;
+}
+
+.ubicacion-icon-btn:hover {
+    border-color: #007bff;
+    background: #e7f3ff;
+    color: #007bff;
+    transform: scale(1.1);
+}
+
+.ubicacion-icon-btn.active {
+    border-color: #007bff;
+    background: #007bff;
+    color: white;
+    box-shadow: 0 2px 6px rgba(0,123,255,0.3);
+    transform: scale(1.05);
+}
+
+.ubicacion-icon-btn.active svg {
+    color: white;
+}
+
+.ubicacion-icon-btn.active svg circle[stroke] {
+    stroke: white;
+}
+
+/* Para el botón "toda" - círculo completo relleno */
+.ubicacion-icon-btn.active[data-ubicacion="toda"] svg circle.full-circle {
+    fill: white;
+    opacity: 1;
+    stroke: white;
+}
+
+/* Para el botón "izquierda" - medio círculo izquierdo */
+.ubicacion-icon-btn.active[data-ubicacion="izquierda"] svg path.half-circle-left {
+    fill: white;
+    opacity: 1;
+}
+
+/* Para el botón "derecha" - medio círculo derecho */
+.ubicacion-icon-btn.active[data-ubicacion="derecha"] svg path.half-circle-right {
+    fill: white;
+    opacity: 1;
+}
+
+.ubicacion-icon-btn svg {
+    width: 20px;
+    height: 20px;
+}
+
+/* Responsive para móviles */
+@media (max-width: 768px) {
+    #customPizzaModalContainer #ingredientesContainer {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+    
+    .ingrediente-item {
+        padding: 10px 12px;
+    }
+    
+    .ingrediente-row {
+        gap: 10px;
+    }
+    
+    .ubicacion-icons {
+        gap: 6px;
+    }
+    
+    .ubicacion-icon-btn {
+        width: 36px;
+        height: 36px;
+    }
+    
+    .ubicacion-icon-btn svg {
+        width: 18px;
+        height: 18px;
+    }
+    
+    #customPizzaModalContainer .modal-dialog {
+        margin: 10px;
+    }
+    
+    #customPizzaModalContainer .modal-body {
+        padding: 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    .ingrediente-name {
+        font-size: 0.9rem;
+    }
+    
+    .ubicacion-icon-btn {
+        width: 32px;
+        height: 32px;
+    }
+    
+    .ubicacion-icon-btn svg {
+        width: 16px;
+        height: 16px;
+    }
+    
+    .ingrediente-row {
+        gap: 8px;
+    }
+}
+
+/* Mejoras adicionales para tablets */
+@media (min-width: 769px) and (max-width: 1024px) {
+    #customPizzaModalContainer #ingredientesContainer {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
 

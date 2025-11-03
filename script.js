@@ -17,18 +17,6 @@ const ingredientes = [
     'Aceitunas'
 ];
 
-// Lista de especialidades con sus ingredientes
-const especialidades = {
-    "Hawaiana": { ingredientes: ["Jamón", "Piña"], precio: 159 },
-    "Mexicana": { ingredientes: ["Chorizo", "Pimiento Morron", "Cebolla", "Tomate"], precio: 169 },
-    "3 Carnes": { ingredientes: ["Pepperoni", "Jamón", "Salchicha Italiana"], precio: 169 },
-    "4 Carnes": { ingredientes: ["Pepperoni", "Jamón", "Salchicha Italiana", "Tocino"], precio: 179 },
-    "Al Pastor": { ingredientes: ["Trompo", "Piña"], precio: 179 },
-    "Suprema": { ingredientes: ["Pepperoni", "Jamón", "Salchicha Italiana", "Pimiento Morron", "Cebolla", "Champiñones"], precio: 179 },
-    "Flaming Hot": { ingredientes: ["Pepperoni", "Cheetos", "Queso Amarillo"], precio: 179 },
-};
-
-
 const ingredientesExtra = {};
   
 
@@ -51,13 +39,13 @@ const pizzas = [
     
     { id: "pizza-peperoniExtra", type: "pizza", id: "extrapeperoni", name: "Pizza de Extra Pepperoni", img: "imgs/extrapeperoni.jpg", price: 129 },
 
-    { id: "pizza-peperoniExtra", type: "pizza", id: "mitamita", name: "1/2 Peperoni 1/2 Queso ", img: "imgs/pizzamitamita.jpeg", price: 109 },
+    { id: "pizza-peperoniExtra", type: "pizza", id: "mitamita", name: "1/2 Peperoni 1/2 Queso ", img: "imgs/pizzamitamita.jpeg", price: 119 },
 
-    { id: "pizza-suprema", type: "pizza", id: "suprema", name: "Pizza Suprema", img: "imgs/suprema.jpg", price: 179 },
+    { id: "pizza-suprema", type: "pizza", id: "suprema", name: "Pizza Suprema", img: "imgs/suprema.jpg", price: 189 },
     
     { id: "pizza-hawaiana", type: "pizza", id: "hawaiana", name: "Pizza Hawaiana", img: "imgs/hawaiana.jpg", price: 159 },
     
-    { id: "pizza-trompo", type: "pizza", id: "trompo", name: "Pizza De Trompo", img: "imgs/pizzaTrompo.jpg", price: 155 },
+    { id: "pizza-trompo", type: "pizza", id: "trompo", name: "Pizza De Trompo", img: "imgs/pizzaTrompo.jpg", price: 159 },
     
     { id: "pizza-3carnes", type: "pizza", id: "3carnes", name: "Pizza 3 Carnes", img: "imgs/3carnes.jpg", price: 169 },
     
@@ -65,11 +53,11 @@ const pizzas = [
     
     { id: "pizza-boneless", type: "pizza", id: "pizzaBoneless", name: "Pizza de Boneless con Aderezo", img: "imgs/pizzaBoneless.jpg", price: 185 },
     
-    { id: "pizza-mexicana", type: "pizza", id: "mexicana", name: "Pizza A la Mexicana", img: "imgs/mexicana.jpg", price: 169 },
+    { id: "pizza-mexicana", type: "pizza", id: "mexicana", name: "Pizza A la Mexicana", img: "imgs/mexicana.jpg", price: 179 },
     
     { id: "pizza-cheetos", type: "pizza", id: "cheetos", name: "Pizza de Cheetos Flamin Hot", img: "imgs/cheetos.jpg", price: 179 },
     
-    { id: "pizza-vegetariana", type: "pizza", id: "vegetariana", name: "Pizza Vegetariana", img: "imgs/vegetariana.jpg", price: 175 }
+    { id: "pizza-vegetariana", type: "pizza", id: "vegetariana", name: "Pizza Vegetariana", img: "imgs/vegetariana.jpg", price: 179 }
 ];
 
 const paquetes = [
@@ -142,10 +130,11 @@ const complementos = [
     { id: "complemento-espagueti-sencillo", type: "complemento", name: "Espagueti Sencillo", img: "imgs/espagueti.jpg", price: 59 },
     { id: "complemento-espagueti-carne", type: "complemento", name: "Espagueti Con Carne", img: "imgs/espagueticarne.jpg", price: 79 },
     { id: "complemento-aderezo", type: "complemento", name: "Aderezo", img: "imgs/aderezo.jpg", price: 15, options: { sauces: ["Ranch", "Jalapeño", "Chipotle", "BBQ", "Buffalo", "Mango Habanero", "Parmesano", "Lemon Pepper"] } },
+    { id: "complemento-3aderezos", type: "complemento", name: "3 Aderezos por $30", img: "imgs/aderezo.jpg", price: 30, options: { sauces: ["Ranch", "Jalapeño", "Chipotle", "BBQ", "Buffalo", "Mango Habanero", "Parmesano", "Lemon Pepper"], multiple: true } },
     { id: "complemento-aros-cebolla", type: "complemento", name: "6 Aros de Cebolla", img: "imgs/arosdecebolla.jpg", price: 60 },
     { id: "complemento-dedos-queso", type: "complemento", name: "5 Dedos de Queso", img: "imgs/dedosdequeso.jpg", price: 89},
     { id: "complemento-jalapenos-poppers", type: "complemento", name: "5 Jalapeños Poppers", img: "imgs/jalapeñospoppers.jpg", price: 89 },
-    { id: "complemento-refresco", type: "complemento", name: "Refresco Grande 1.75L", img: "imgs/cocacola.jpg", price: 45 }
+    { id: "complemento-refresco", type: "complemento", name: "Refresco Grande 1.75L", img: "imgs/cocacola.jpg", price: 49 }
 ];
 
 let currentProduct = null;
@@ -477,9 +466,20 @@ function increaseQuantity(type, name) { //name es el id para que no refactorice 
 
         case "complemento": // aquiiii poner los de los aderezos 
             if (product.options && product.options.sauces) {
-                const sauceSelect = createSelectElement(product.options.sauces, 'sauces', 'Selecciona un aderezo:');
-                optionsForm.appendChild(sauceSelect);
-                hasOptions = true;
+                // Si es el producto de 3 aderezos, crear 3 selects
+                if (product.options.multiple && product.name === "3 Aderezos por $30") {
+                    const sauceSelect1 = createSelectElement(product.options.sauces, 'sauces1', 'Selecciona el primer aderezo:');
+                    const sauceSelect2 = createSelectElement(product.options.sauces, 'sauces2', 'Selecciona el segundo aderezo:');
+                    const sauceSelect3 = createSelectElement(product.options.sauces, 'sauces3', 'Selecciona el tercer aderezo:');
+                    optionsForm.appendChild(sauceSelect1);
+                    optionsForm.appendChild(sauceSelect2);
+                    optionsForm.appendChild(sauceSelect3);
+                    hasOptions = true;
+                } else {
+                    const sauceSelect = createSelectElement(product.options.sauces, 'sauces', 'Selecciona un aderezo:');
+                    optionsForm.appendChild(sauceSelect);
+                    hasOptions = true;
+                }
             }
             break;
 
@@ -680,12 +680,27 @@ function saveOptions() {
     }
 
     if (product.type === "complemento") {
-        const sauceSelect = document.querySelector('select[name="sauces"]');
-        
-        if (sauceSelect && sauceSelect.value) {
-            selectedOptions.options.sauce = sauceSelect.value;
+        // Si es el producto de 3 aderezos, guardar los 3 aderezos
+        if (product.name === "3 Aderezos por $30") {
+            const sauceSelect1 = document.querySelector('select[name="sauces1"]');
+            const sauceSelect2 = document.querySelector('select[name="sauces2"]');
+            const sauceSelect3 = document.querySelector('select[name="sauces3"]');
+            
+            if (sauceSelect1 && sauceSelect1.value && sauceSelect2 && sauceSelect2.value && sauceSelect3 && sauceSelect3.value) {
+                selectedOptions.options.sauce1 = sauceSelect1.value;
+                selectedOptions.options.sauce2 = sauceSelect2.value;
+                selectedOptions.options.sauce3 = sauceSelect3.value;
+            } else {
+                allOptionsSelected = false; // Marcar como incompleto si falta algún aderezo
+            }
         } else {
-            allOptionsSelected = false; // Marcar como incompleto si falta la opción de salsa
+            const sauceSelect = document.querySelector('select[name="sauces"]');
+            
+            if (sauceSelect && sauceSelect.value) {
+                selectedOptions.options.sauce = sauceSelect.value;
+            } else {
+                allOptionsSelected = false; // Marcar como incompleto si falta la opción de salsa
+            }
         }
     }
 
@@ -864,57 +879,88 @@ function decreaseCustomPizza() {
 
 function openCreatePizzaModal() {
     const ingredientesContainer = document.getElementById('ingredientesContainer');
-    const especialidadesContainer = document.getElementById('especialidadesContainer');
     
-    // Limpiar contenedores
+    // Limpiar contenedor
     ingredientesContainer.innerHTML = '';
-    especialidadesContainer.innerHTML = '';
 
-    // Generar dinámicamente los checkboxes de ingredientes normales
+    // Generar dinámicamente los ingredientes con opciones de ubicación siempre visibles
     ingredientes.forEach(ingrediente => {
         const div = document.createElement('div');
-        div.className = "form-check";
+        div.className = "ingrediente-item";
         div.innerHTML = `
-            <input class="form-check-input" type="checkbox" value="${ingrediente}" id="ingrediente-${ingrediente}">
-            <label class="form-check-label" for="ingrediente-${ingrediente}">${ingrediente}</label>
+            <div class="ingrediente-row">
+                <span class="ingrediente-name">${ingrediente}</span>
+                <div class="ubicacion-icons">
+                    <button type="button" class="ubicacion-icon-btn" data-ubicacion="izquierda" data-ingrediente="${ingrediente}" title="Mitad Izquierda">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2" fill="none"/>
+                            <path d="M12 3 A9 9 0 0 0 12 21 L12 3 Z" fill="currentColor" opacity="0.3" class="half-circle-left"/>
+                        </svg>
+                    </button>
+                    <button type="button" class="ubicacion-icon-btn" data-ubicacion="toda" data-ingrediente="${ingrediente}" title="Toda la pizza">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2" fill="currentColor" opacity="0.3" class="full-circle"/>
+                        </svg>
+                    </button>
+                    <button type="button" class="ubicacion-icon-btn" data-ubicacion="derecha" data-ingrediente="${ingrediente}" title="Mitad Derecha">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2" fill="none"/>
+                            <path d="M12 3 A9 9 0 0 1 12 21 L12 3 Z" fill="currentColor" opacity="0.3" class="half-circle-right"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            <input type="hidden" class="ubicacion-value" id="ubicacion-${ingrediente}" value="">
         `;
         ingredientesContainer.appendChild(div);
     });
 
-    // Generar botones de especialidades
-    Object.keys(especialidades).forEach(especialidad => {
-        const div = document.createElement('div');
-        div.className = "form-check";
-        div.innerHTML = `
-            <input class="form-check-input" type="radio" name="especialidad" value="${especialidad}" id="especialidad-${especialidad}">
-            <label class="form-check-label" for="especialidad-${especialidad}">${especialidad} ($${especialidades[especialidad].precio})</label>
-        `;
-        especialidadesContainer.appendChild(div);
-    });
-
-
-    // Asignar eventos a los checkboxes
-    document.querySelectorAll('#ingredientesContainer .form-check-input').forEach(checkbox => {
-        checkbox.addEventListener('change', function() {
-            verificarEspecialidad();
-            limpiarIngredientesEspeciales();
+    // Asignar eventos a los botones de ubicación con funcionalidad de deselección
+    document.querySelectorAll('#ingredientesContainer .ubicacion-icon-btn').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.stopPropagation(); // Evitar que se propague al div del ingrediente
+            const ingrediente = this.getAttribute('data-ingrediente');
+            const ubicacion = this.getAttribute('data-ubicacion');
+            const ubicacionInput = document.getElementById(`ubicacion-${ingrediente}`);
+            const currentUbicacion = ubicacionInput.value;
+            
+            // Si se hace clic en el mismo botón activo, deseleccionar
+            if (currentUbicacion === ubicacion && this.classList.contains('active')) {
+                ubicacionInput.value = '';
+                this.classList.remove('active');
+            } else {
+                // Seleccionar la nueva ubicación
+                ubicacionInput.value = ubicacion;
+                document.querySelectorAll(`[data-ingrediente="${ingrediente}"].ubicacion-icon-btn`).forEach(b => {
+                    b.classList.remove('active');
+                });
+                this.classList.add('active');
+            }
+            
             actualizarPrecioDinamico();
         });
     });
-    
-    // Evento para especialidades
-    document.querySelectorAll('input[name="especialidad"]').forEach(radio => {
-        radio.addEventListener('change', function() {
-            seleccionarEspecialidad(radio.value);
-            actualizarPrecioDinamico();
+
+    // Permitir deseleccionar al hacer clic en el div del ingrediente (pero no en los botones)
+    document.querySelectorAll('#ingredientesContainer .ingrediente-item').forEach(item => {
+        item.addEventListener('click', function(e) {
+            // Solo si el clic no fue en un botón de ubicación
+            if (!e.target.closest('.ubicacion-icon-btn')) {
+                const ingredienteName = item.querySelector('.ingrediente-name').textContent;
+                // Encontrar el input hidden correspondiente
+                const ubicacionInput = item.querySelector('.ubicacion-value');
+                if (ubicacionInput && ubicacionInput.value) {
+                    ubicacionInput.value = '';
+                    // Desactivar todos los botones de este ingrediente
+                    item.querySelectorAll('.ubicacion-icon-btn').forEach(btn => {
+                        btn.classList.remove('active');
+                    });
+                    actualizarPrecioDinamico();
+                }
+            }
         });
     });
 
-
-    // Asignar eventos a los checkboxes dinámicos
-    document.querySelectorAll('#ingredientesContainer .form-check-input').forEach(checkbox => 
-        checkbox.addEventListener('change', actualizarPrecioDinamico)
-    ); //??? checar si no causa conflicto
    
 
     // Eventos para opciones adicionales
@@ -926,132 +972,82 @@ function openCreatePizzaModal() {
 }
 
 
-function agregarIngrediente(ingrediente) {
-    // Verificar si el ingrediente ya existe
-    if (!document.getElementById(`ingrediente-${ingrediente}`)) {
-        const ingredientesContainer = document.getElementById('ingredientesContainer');
-        const nuevoIngrediente = document.createElement('div');
-        nuevoIngrediente.className = "form-check ingrediente-especial";
-        nuevoIngrediente.innerHTML = `
-            <input class="form-check-input" type="checkbox" value="${ingrediente}" id="ingrediente-${ingrediente}" checked>
-            <label class="form-check-label" for="ingrediente-${ingrediente}">${ingrediente}</label>
-        `;
-        ingredientesContainer.appendChild(nuevoIngrediente);
-        
-        // Agregar eventos al nuevo ingrediente
-        document.getElementById(`ingrediente-${ingrediente}`).addEventListener('change', function() {
-            verificarEspecialidad();
-            actualizarPrecioDinamico();
-        });
-    }
-}
-
-function limpiarIngredientesEspeciales() {
-    // Obtener todos los ingredientes especiales (los que no están en la lista normal)
-    const ingredientesEspeciales = document.querySelectorAll('.ingrediente-especial');
-    const ingredientesSeleccionados = Array.from(document.querySelectorAll('#ingredientesContainer .form-check-input:checked'))
-        .map(input => input.value);
-    
-    // Verificar si algún ingrediente especial está deseleccionado
-    let mantenerEspeciales = false;
-    document.querySelectorAll('input[name="especialidad"]:checked').forEach(radio => {
-        const especialidad = radio.value;
-        if (especialidades[especialidad].ingredientes.every(ing => ingredientesSeleccionados.includes(ing))) {
-            mantenerEspeciales = true;
-        }
-    });
-    
-    // Eliminar ingredientes especiales si no se está seleccionada su especialidad
-    if (!mantenerEspeciales) {
-        ingredientesEspeciales.forEach(ing => {
-            if (!ingredientes.includes(ing.querySelector('input').value)) {
-                ing.remove();
-            }
-        });
-    }
-}
-
-function verificarEspecialidad() {
-    const ingredientesSeleccionados = Array.from(document.querySelectorAll('#ingredientesContainer .form-check-input:checked'))
-        .map(input => input.value);
-
-    // Desmarcar todas las especialidades primero
-    document.querySelectorAll('input[name="especialidad"]').forEach(radio => {
-        radio.checked = false;
-    });
-
-    // Verificar si la selección coincide con alguna especialidad
-    for (const [nombre, datos] of Object.entries(especialidades)) {
-        const todosIngredientesPresentes = datos.ingredientes.every(ing => ingredientesSeleccionados.includes(ing));
-        const mismaCantidad = ingredientesSeleccionados.length === datos.ingredientes.length;
-        
-        if (todosIngredientesPresentes && mismaCantidad) {
-            document.getElementById(`especialidad-${nombre}`).checked = true;
-            break; // Solo puede coincidir con una especialidad
-        }
-    }
-}
-
-function seleccionarEspecialidad(especialidad) {
-    // Desmarcar todos los ingredientes primero
-    document.querySelectorAll('#ingredientesContainer .form-check-input').forEach(checkbox => {
-        checkbox.checked = false;
-    });
-
-    // Eliminar ingredientes especiales anteriores
-    document.querySelectorAll('.ingrediente-especial').forEach(el => el.remove());
-
-    // Marcar los ingredientes de la especialidad seleccionada
-    const ingredientesEspecialidad = especialidades[especialidad].ingredientes;
-    
-    ingredientesEspecialidad.forEach(ingrediente => {
-        if (!ingredientes.includes(ingrediente)) {
-            agregarIngrediente(ingrediente);
-        } else {
-            const checkbox = document.getElementById(`ingrediente-${ingrediente}`);
-            if (checkbox) {
-                checkbox.checked = true;
-            }
-        }
-    });
-}
 
 // Función para actualizar la vista previa
 function updatePreview() {
-    const selectedIngredients = Array.from(document.querySelectorAll('#ingredientesContainer .form-check-input:checked'))
-        .map(input => input.value);
+    const selectedIngredients = [];
+    const ingredientes = document.querySelectorAll('#ingredientesContainer .ingrediente-item');
+    let tieneSoloPepperoniEnMitad = false;
+    
+    // Primero contar cuántos ingredientes están seleccionados
+    let ingredientesSeleccionados = [];
+    ingredientes.forEach(item => {
+        const ingredienteName = item.querySelector('.ingrediente-name').textContent;
+        const ubicacionInput = item.querySelector('.ubicacion-value');
+        const ubicacion = ubicacionInput ? ubicacionInput.value : '';
+        
+        if (ubicacion) {
+            ingredientesSeleccionados.push({name: ingredienteName, ubicacion: ubicacion});
+        }
+    });
+    
+    // Verificar si es solo Pepperoni en mitad izquierda o derecha
+    if (ingredientesSeleccionados.length === 1 && 
+        ingredientesSeleccionados[0].name === 'Pepperoni' &&
+        (ingredientesSeleccionados[0].ubicacion === 'izquierda' || ingredientesSeleccionados[0].ubicacion === 'derecha')) {
+        tieneSoloPepperoniEnMitad = true;
+    }
+    
+    // Construir texto de ingredientes
+    ingredientesSeleccionados.forEach(ing => {
+        let ubicacionTexto = '';
+        if (ing.ubicacion === 'izquierda') {
+            ubicacionTexto = ' (Mitad Izquierda)';
+        } else if (ing.ubicacion === 'derecha') {
+            ubicacionTexto = ' (Mitad Derecha)';
+        } else if (ing.ubicacion === 'toda') {
+            ubicacionTexto = ' (Toda la pizza)';
+        }
+        selectedIngredients.push(`${ing.name}${ubicacionTexto}`);
+    });
+    
     const orillaRellena = document.getElementById('orillaRellena').checked ? 'Orilla Rellena' : null;
     const quesoExtra = document.getElementById('quesoExtra').checked ? 'Queso Extra' : null;
 
-    const previewText = [...selectedIngredients, orillaRellena, quesoExtra]
+    let previewText = [...selectedIngredients, orillaRellena, quesoExtra]
         .filter(Boolean)
         .join(', ');
+    
+    // Agregar mensaje explicativo para Pepperoni en mitad
+    if (tieneSoloPepperoniEnMitad) {
+        previewText += ' (Incluye más queso en la otra mitad)';
+    }
 
     document.getElementById('previewPizza').value = previewText || 'No has seleccionado nada.';
 }
 
-function calcularPrecioPizza(ingredientesSeleccionados, orillaRellena = false) {
-    // Verificar si es una especialidad exacta
-    for (const [nombre, datos] of Object.entries(especialidades)) {
-        const todosIngredientesPresentes = datos.ingredientes.every(ing => ingredientesSeleccionados.includes(ing));
-        const mismaCantidad = ingredientesSeleccionados.length === datos.ingredientes.length;
-        
-        if (todosIngredientesPresentes && mismaCantidad) {
-            // Precio especial cuando es especialidad exacta + orilla rellena
-            if (orillaRellena) {
-                return 199; // Precio fijo para cualquier especialidad con orilla rellena
-            }
-            return datos.precio; // Precio normal de la especialidad
-        }
-    }
-
-    // Si no es una especialidad exacta, calcular precio normal
+function calcularPrecioPizza(ingredientesSeleccionados, orillaRellena = false, ingredientesConUbicacion = {}) {
+    // Calcular precio normal
     let precioBase = 0;
 
     if (ingredientesSeleccionados.length === 0) {
         precioBase = 0;
     } else if (ingredientesSeleccionados.length === 1) {
-        if (ingredientesSeleccionados.includes('Pepperoni') || ingredientesSeleccionados.includes('Queso')) {
+        // Lógica especial para Pepperoni según ubicación
+        if (ingredientesSeleccionados.includes('Pepperoni')) {
+            const ubicacionPepperoni = ingredientesConUbicacion['Pepperoni'];
+            // Si es solo Pepperoni en toda la pizza, precio normal $99
+            if (ubicacionPepperoni === 'toda') {
+                precioBase = 99;
+            } 
+            // Si es Pepperoni en mitad izquierda o derecha, precio $109
+            else if (ubicacionPepperoni === 'izquierda' || ubicacionPepperoni === 'derecha') {
+                precioBase = 119;
+            } else {
+                // Por defecto (sin ubicación o desconocida)
+                precioBase = 99;
+            }
+        } else if (ingredientesSeleccionados.includes('Queso')) {
             precioBase = 99;
         } else {
             precioBase = 129;
@@ -1081,13 +1077,18 @@ function calcularPrecioPizza(ingredientesSeleccionados, orillaRellena = false) {
 
 function guardarPizza() {
     const selectedIngredients = [];
-    const ingredientesContainer = document.getElementById('ingredientesContainer');
-    const checkboxes = ingredientesContainer.querySelectorAll('.form-check-input');
+    const ingredientesConUbicacion = {};
+    const ingredientesItems = document.querySelectorAll('#ingredientesContainer .ingrediente-item');
 
-    // Obtener ingredientes seleccionados
-    checkboxes.forEach(checkbox => {
-        if (checkbox.checked) {
-            selectedIngredients.push(checkbox.value);
+    // Obtener ingredientes seleccionados con su ubicación
+    ingredientesItems.forEach(item => {
+        const ingrediente = item.querySelector('.ingrediente-name').textContent;
+        const ubicacionInput = item.querySelector('.ubicacion-value');
+        const ubicacion = ubicacionInput ? ubicacionInput.value : '';
+        
+        if (ubicacion) {
+            selectedIngredients.push(ingrediente);
+            ingredientesConUbicacion[ingrediente] = ubicacion;
         }
     });
 
@@ -1107,7 +1108,8 @@ function guardarPizza() {
     }
 
     // Calcular el precio usando la misma lógica que actualizarPrecioDinamico
-    let precioBase = calcularPrecioPizza(selectedIngredients, orillaRellena);
+    // Incluir ingredientesConUbicacion para la lógica especial de Pepperoni
+    let precioBase = calcularPrecioPizza(selectedIngredients, orillaRellena, ingredientesConUbicacion);
     
     // Agregar queso extra si está seleccionado
     if (quesoExtra) {
@@ -1120,6 +1122,7 @@ function guardarPizza() {
         price: precioBase,
         options: {
             ingredientes: selectedIngredients,
+            ingredientesConUbicacion: ingredientesConUbicacion,
             orillaRellena,
             quesoExtra
         },
@@ -1139,16 +1142,28 @@ function guardarPizza() {
 
 // Función para actualizar el precio en tiempo real
 function actualizarPrecioDinamico() {
-    // Obtener ingredientes seleccionados
-    const selectedIngredients = Array.from(document.querySelectorAll('#ingredientesContainer .form-check-input:checked'))
-        .map(input => input.value);
+    // Obtener ingredientes seleccionados (los que tienen una ubicación asignada)
+    const selectedIngredients = [];
+    const ingredientesConUbicacion = {};
+    const ingredientes = document.querySelectorAll('#ingredientesContainer .ingrediente-item');
+    
+    ingredientes.forEach(item => {
+        const ingredienteName = item.querySelector('.ingrediente-name').textContent;
+        const ubicacionInput = item.querySelector('.ubicacion-value');
+        const ubicacion = ubicacionInput ? ubicacionInput.value : '';
+        
+        if (ubicacion) {
+            selectedIngredients.push(ingredienteName);
+            ingredientesConUbicacion[ingredienteName] = ubicacion;
+        }
+    });
 
     // Opciones adicionales
     const orillaRellena = document.getElementById('orillaRellena').checked;
     const quesoExtra = document.getElementById('quesoExtra').checked;
 
-    // Calcular precio base (incluye lógica de especialidad + orilla rellena)
-    let precioBase = calcularPrecioPizza(selectedIngredients, orillaRellena);
+    // Calcular precio base (incluye lógica especial para Pepperoni según ubicación)
+    let precioBase = calcularPrecioPizza(selectedIngredients, orillaRellena, ingredientesConUbicacion);
 
     // Agregar queso extra
     if (quesoExtra) {
@@ -1162,14 +1177,8 @@ function actualizarPrecioDinamico() {
 
 // Función para inicializar eventos
 function inicializarEventosModal() {
-    const checkboxes = document.querySelectorAll('#ingredientesContainer .form-check-input');
     const orillaRellena = document.getElementById('orillaRellena');
     const quesoExtra = document.getElementById('quesoExtra');
-
-    // Agregar evento a cada checkbox
-    checkboxes.forEach(checkbox => {
-        checkbox.addEventListener('change', actualizarPrecioDinamico);
-    });
 
     // Eventos para extras
     orillaRellena.addEventListener('change', actualizarPrecioDinamico);
@@ -1178,7 +1187,12 @@ function inicializarEventosModal() {
 
 // Reiniciar el modal al abrir
 function reiniciarModalPizza() {
-    document.querySelectorAll('.form-check-input').forEach(input => input.checked = false);
+    document.querySelectorAll('.ubicacion-value').forEach(input => {
+        input.value = '';
+    });
+    document.querySelectorAll('.ubicacion-icon-btn').forEach(btn => {
+        btn.classList.remove('active');
+    });
     document.getElementById('orillaRellena').checked = false;
     document.getElementById('quesoExtra').checked = false;
     document.getElementById('previewPizza').value = 'Aquí se mostrarán tus selecciones...';
@@ -1356,6 +1370,11 @@ function reviewOrder() {
             // Este es para el aderezo
         }
 
+        // Para 3 Aderezos por $30
+        if (product.name === "3 Aderezos por $30" && optionObject.sauce1 && optionObject.sauce2 && optionObject.sauce3) {
+            li.textContent = `${productQuantity > 1 ? `${productQuantity} ` : ''}${name}: ${optionObject.sauce1}, ${optionObject.sauce2}, ${optionObject.sauce3}`;
+        }
+
         // Para los paquetes
         if (product.name == "Paquete 1") { // Paquete 1
             li.textContent = `${productQuantity > 1 ? `${productQuantity} ` : ''}${name}: Pizza de Peperoni, Boneless ${optionObject['Tipo']} con Salsa ${optionObject['Aderezo A Elegir']} y un Refresco Grande 1.75L`; //Paquete 3
@@ -1396,13 +1415,45 @@ function reviewOrder() {
     // Mostrar pizzas personalizadas
     pizzasPersonalizadas.forEach(pizza => {
         const { name, price, options } = pizza;
-        const ingredientDetails = options.ingredientes.join(', ');
+        
+        // Construir detalles de ingredientes con ubicación
+        let ingredientDetails = [];
+        let mensajeQuesoExtra = '';
+        
+        if (options.ingredientesConUbicacion) {
+            options.ingredientes.forEach(ing => {
+                const ubicacion = options.ingredientesConUbicacion[ing];
+                let ubicacionTexto = '';
+                if (ubicacion === 'izquierda') {
+                    ubicacionTexto = ' (Mitad Izquierda)';
+                } else if (ubicacion === 'derecha') {
+                    ubicacionTexto = ' (Mitad Derecha)';
+                } else {
+                    ubicacionTexto = ' (Toda la pizza)';
+                }
+                ingredientDetails.push(`${ing}${ubicacionTexto}`);
+            });
+            
+            // Verificar si es solo Pepperoni en mitad izquierda o derecha
+            const esSoloPepperoniEnMitad = options.ingredientes.length === 1 && 
+                options.ingredientes[0] === 'Pepperoni' &&
+                (options.ingredientesConUbicacion['Pepperoni'] === 'izquierda' || options.ingredientesConUbicacion['Pepperoni'] === 'derecha');
+            
+            if (esSoloPepperoniEnMitad) {
+                mensajeQuesoExtra = ' (Incluye más queso en la otra mitad)';
+            }
+        } else {
+            // Compatibilidad con pizzas guardadas antes (sin ubicación)
+            ingredientDetails = options.ingredientes;
+        }
+        
+        const ingredientText = ingredientDetails.join(', ');
         const orillaRellenaText = options.orillaRellena ? 'Con orilla rellena' : '';
         const quesoExtraText = options.quesoExtra ? 'Con extra queso' : '';
 
         const li = document.createElement('li');
         li.className = 'list-group-item d-flex justify-content-between align-items-center';
-        li.textContent = `${name} (${ingredientDetails}), ${orillaRellenaText}, ${quesoExtraText}`;
+        li.textContent = `${name} (${ingredientText})${mensajeQuesoExtra}, ${orillaRellenaText}, ${quesoExtraText}`;
         
         const span = document.createElement('span');
         span.className = 'badge badge-primary badge-pill';
@@ -1697,6 +1748,8 @@ function sendOrder() {
         } else if (optionObject.sauce && Object.keys(optionObject).length === 1){
         optionDetails = `Salsa ${optionObject.sauce}`; 
             // Este es para el aderezo
+        } else if (product.name === "3 Aderezos por $30" && optionObject.sauce1 && optionObject.sauce2 && optionObject.sauce3) {
+            optionDetails = `${optionObject.sauce1}, ${optionObject.sauce2}, ${optionObject.sauce3}`;
         }
             
          
@@ -1711,14 +1764,40 @@ function sendOrder() {
     // Agregar pizzas personalizadas
     pizzasPersonalizadas.forEach(pizza => {
         const { name, price, options } = pizza;
-        const { ingredientes, orillaRellena, quesoExtra } = options;
+        const { ingredientes, ingredientesConUbicacion, orillaRellena, quesoExtra } = options;
 
         // Crear descripción de la pizza personalizada
         let pizzaDescription = `1 ${name} ($${price.toFixed(2)}): `;
 
-        // Ingredientes seleccionados
+        // Ingredientes seleccionados con ubicación
         if (ingredientes.length > 0) {
-            pizzaDescription += `con ${ingredientes.join(', ')}`;
+            if (ingredientesConUbicacion) {
+                const ingredientesConUbicacionTexto = ingredientes.map(ing => {
+                    const ubicacion = ingredientesConUbicacion[ing];
+                    let ubicacionTexto = '';
+                    if (ubicacion === 'izquierda') {
+                        ubicacionTexto = ' en Mitad Izquierda';
+                    } else if (ubicacion === 'derecha') {
+                        ubicacionTexto = ' en Mitad Derecha';
+                    } else {
+                        ubicacionTexto = ' en Toda la pizza';
+                    }
+                    return `${ing}${ubicacionTexto}`;
+                });
+                pizzaDescription += `con ${ingredientesConUbicacionTexto.join(', ')}`;
+                
+                // Verificar si es solo Pepperoni en mitad izquierda o derecha
+                const esSoloPepperoniEnMitad = ingredientes.length === 1 && 
+                    ingredientes[0] === 'Pepperoni' &&
+                    (ingredientesConUbicacion['Pepperoni'] === 'izquierda' || ingredientesConUbicacion['Pepperoni'] === 'derecha');
+                
+                if (esSoloPepperoniEnMitad) {
+                    pizzaDescription += ' (Incluye más queso en la otra mitad)';
+                }
+            } else {
+                // Compatibilidad con pizzas guardadas antes (sin ubicación)
+                pizzaDescription += `con ${ingredientes.join(', ')}`;
+            }
         }
 
         // Opciones adicionales
