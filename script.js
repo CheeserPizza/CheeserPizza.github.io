@@ -1001,13 +1001,13 @@ function updatePreview() {
     // Construir texto de ingredientes
     ingredientesSeleccionados.forEach(ing => {
         let ubicacionTexto = '';
+        // Solo mostrar ubicación si es en mitad izquierda o derecha
         if (ing.ubicacion === 'izquierda') {
             ubicacionTexto = ' (Mitad Izquierda)';
         } else if (ing.ubicacion === 'derecha') {
             ubicacionTexto = ' (Mitad Derecha)';
-        } else if (ing.ubicacion === 'toda') {
-            ubicacionTexto = ' (Toda la pizza)';
         }
+        // Si es "toda", no agregar texto de ubicación
         selectedIngredients.push(`${ing.name}${ubicacionTexto}`);
     });
     
@@ -1424,13 +1424,13 @@ function reviewOrder() {
             options.ingredientes.forEach(ing => {
                 const ubicacion = options.ingredientesConUbicacion[ing];
                 let ubicacionTexto = '';
+                // Solo mostrar ubicación si es en mitad izquierda o derecha
                 if (ubicacion === 'izquierda') {
                     ubicacionTexto = ' (Mitad Izquierda)';
                 } else if (ubicacion === 'derecha') {
                     ubicacionTexto = ' (Mitad Derecha)';
-                } else {
-                    ubicacionTexto = ' (Toda la pizza)';
                 }
+                // Si es "toda", no agregar texto de ubicación
                 ingredientDetails.push(`${ing}${ubicacionTexto}`);
             });
             
@@ -1775,13 +1775,13 @@ function sendOrder() {
                 const ingredientesConUbicacionTexto = ingredientes.map(ing => {
                     const ubicacion = ingredientesConUbicacion[ing];
                     let ubicacionTexto = '';
+                    // Solo mostrar ubicación si es en mitad izquierda o derecha
                     if (ubicacion === 'izquierda') {
                         ubicacionTexto = ' en Mitad Izquierda';
                     } else if (ubicacion === 'derecha') {
                         ubicacionTexto = ' en Mitad Derecha';
-                    } else {
-                        ubicacionTexto = ' en Toda la pizza';
                     }
+                    // Si es "toda", no agregar texto de ubicación
                     return `${ing}${ubicacionTexto}`;
                 });
                 pizzaDescription += `con ${ingredientesConUbicacionTexto.join(', ')}`;
