@@ -112,6 +112,68 @@ nav {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
+/* Responsive para el modal de confirmación */
+@media (max-width: 768px) {
+    #orderModal .modal-dialog {
+        margin: 10px;
+        max-width: calc(100% - 20px);
+    }
+    
+    #orderModal .modal-body {
+        padding: 15px;
+    }
+    
+    .order-item-content {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+    
+    .order-item-actions {
+        width: 100%;
+        justify-content: space-between;
+    }
+    
+    .order-item-text {
+        font-size: 0.9rem;
+        line-height: 1.4;
+    }
+    
+    #orderSummary {
+        max-height: 250px;
+    }
+}
+
+@media (max-width: 480px) {
+    #orderModal .modal-dialog {
+        margin: 5px;
+        max-width: calc(100% - 10px);
+    }
+    
+    #orderModal .modal-body {
+        padding: 12px;
+    }
+    
+    .order-item-text {
+        font-size: 0.85rem;
+    }
+    
+    .btn-delete-pizza {
+        min-width: 24px;
+        height: 24px;
+        padding: 2px 6px;
+    }
+    
+    .btn-delete-pizza svg {
+        width: 16px;
+        height: 16px;
+    }
+    
+    #orderSummary {
+        max-height: 200px;
+    }
+}
+
 .modal-header, .modal-footer {
     border: none;
 }
@@ -377,7 +439,7 @@ nav {
 #orderSummary {
     border: 1px solid #e1e1e1;
     border-radius: 8px;
-    max-height: 200px;
+    max-height: 300px;
     overflow-y: auto;
 }
 
@@ -385,6 +447,62 @@ nav {
     border: none;
     padding: 8px 15px;
     font-size: 0.95rem;
+}
+
+.order-item {
+    position: relative;
+}
+
+.order-item-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    gap: 10px;
+}
+
+.order-item-text {
+    flex: 1;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    min-width: 0;
+}
+
+.order-item-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+}
+
+.btn-delete-pizza {
+    background: transparent;
+    border: none;
+    color: #dc3545;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    min-width: 28px;
+    height: 28px;
+}
+
+.btn-delete-pizza:hover {
+    background: #f8d7da;
+    color: #721c24;
+    transform: scale(1.1);
+}
+
+.btn-delete-pizza:active {
+    transform: scale(0.95);
+}
+
+.btn-delete-pizza svg {
+    width: 18px;
+    height: 18px;
 }
 
 .form-group label {

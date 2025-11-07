@@ -868,12 +868,40 @@ function decreaseCustomPizza() {
             pizzasPersonalizadas.pop(); // Elimina la última pizza agregada
             customPizzaQuantityValue--; // Reduce la cantidad
             const customPizzaQuantity = document.getElementById('quantity-customPizza');
-            customPizzaQuantity.value = customPizzaQuantityValue; // Actualiza el valor en la vista
-
+            if (customPizzaQuantity) {
+                customPizzaQuantity.value = customPizzaQuantityValue; // Actualiza el valor en la vista
+            }
+            // Regenerar las cards para actualizar la vista
+            generateCards(pizzas, 'pizza-content', 'pizza');
             console.log("Última pizza personalizada eliminada.");
         }
     } else {
         alert("No tienes pizzas personalizadas para borrar.");
+    }
+}
+
+// Función para eliminar una pizza personalizada específica desde el modal de confirmación
+function eliminarPizzaPersonalizada(index) {
+    if (index >= 0 && index < pizzasPersonalizadas.length) {
+        const confirmDelete = confirm("¿Estás seguro de que quieres eliminar esta pizza personalizada?");
+        if (confirmDelete) {
+            pizzasPersonalizadas.splice(index, 1); // Elimina la pizza en el índice especificado
+            customPizzaQuantityValue--; // Reduce la cantidad
+            
+            // Actualizar la cantidad en la card de "Crea tu pizza"
+            const customPizzaQuantity = document.getElementById('quantity-customPizza');
+            if (customPizzaQuantity) {
+                customPizzaQuantity.value = customPizzaQuantityValue;
+            }
+            
+            // Regenerar las cards para actualizar la vista
+            generateCards(pizzas, 'pizza-content', 'pizza');
+            
+            // Actualizar el resumen del pedido
+            reviewOrder();
+            
+            console.log(`Pizza personalizada en índice ${index} eliminada.`);
+        }
     }
 }
 
@@ -1413,7 +1441,7 @@ function reviewOrder() {
     });
 
     // Mostrar pizzas personalizadas
-    pizzasPersonalizadas.forEach(pizza => {
+    pizzasPersonalizadas.forEach((pizza, index) => {
         const { name, price, options } = pizza;
         
         // Construir detalles de ingredientes con ubicación
@@ -1421,18 +1449,38 @@ function reviewOrder() {
         let mensajeQuesoExtra = '';
         
         if (options.ingredientesConUbicacion) {
+            // Agrupar ingredientes por ubicación
+            const ingredientesToda = [];
+            const ingredientesIzquierda = [];
+            const ingredientesDerecha = [];
+            
             options.ingredientes.forEach(ing => {
                 const ubicacion = options.ingredientesConUbicacion[ing];
-                let ubicacionTexto = '';
-                // Solo mostrar ubicación si es en mitad izquierda o derecha
                 if (ubicacion === 'izquierda') {
-                    ubicacionTexto = ' (Mitad Izquierda)';
+                    ingredientesIzquierda.push(ing);
                 } else if (ubicacion === 'derecha') {
-                    ubicacionTexto = ' (Mitad Derecha)';
+                    ingredientesDerecha.push(ing);
+                } else {
+                    ingredientesToda.push(ing);
                 }
-                // Si es "toda", no agregar texto de ubicación
-                ingredientDetails.push(`${ing}${ubicacionTexto}`);
             });
+            
+            // Construir texto agrupado
+            const partes = [];
+            
+            if (ingredientesToda.length > 0) {
+                partes.push(`Toda: ${ingredientesToda.join(', ')}`);
+            }
+            
+            if (ingredientesIzquierda.length > 0) {
+                partes.push(`Izq: ${ingredientesIzquierda.join(', ')}`);
+            }
+            
+            if (ingredientesDerecha.length > 0) {
+                partes.push(`Der: ${ingredientesDerecha.join(', ')}`);
+            }
+            
+            ingredientDetails = partes;
             
             // Verificar si es solo Pepperoni en mitad izquierda o derecha
             const esSoloPepperoniEnMitad = options.ingredientes.length === 1 && 
@@ -1447,18 +1495,55 @@ function reviewOrder() {
             ingredientDetails = options.ingredientes;
         }
         
-        const ingredientText = ingredientDetails.join(', ');
+        const ingredientText = ingredientDetails.join(' | ');
         const orillaRellenaText = options.orillaRellena ? 'Con orilla rellena' : '';
         const quesoExtraText = options.quesoExtra ? 'Con extra queso' : '';
 
         const li = document.createElement('li');
-        li.className = 'list-group-item d-flex justify-content-between align-items-center';
-        li.textContent = `${name} (${ingredientText})${mensajeQuesoExtra}, ${orillaRellenaText}, ${quesoExtraText}`;
+        li.className = 'list-group-item d-flex justify-content-between align-items-start order-item';
         
+        // Contenedor del contenido
+        const contentDiv = document.createElement('div');
+        contentDiv.className = 'order-item-content';
+        contentDiv.style.flex = '1';
+        
+        // Texto del producto
+        const textDiv = document.createElement('div');
+        textDiv.className = 'order-item-text';
+        textDiv.textContent = `${name} (${ingredientText})${mensajeQuesoExtra}, ${orillaRellenaText}, ${quesoExtraText}`;
+        contentDiv.appendChild(textDiv);
+        
+        // Contenedor de precio y botón eliminar
+        const actionsDiv = document.createElement('div');
+        actionsDiv.className = 'order-item-actions';
+        actionsDiv.style.display = 'flex';
+        actionsDiv.style.alignItems = 'center';
+        actionsDiv.style.gap = '10px';
+        
+        // Precio
         const span = document.createElement('span');
         span.className = 'badge badge-primary badge-pill';
         span.textContent = `$${price.toFixed(2)}`;
-        li.appendChild(span);
+        actionsDiv.appendChild(span);
+        
+        // Botón eliminar (solo para pizzas personalizadas)
+        const deleteBtn = document.createElement('button');
+        deleteBtn.type = 'button';
+        deleteBtn.className = 'btn-delete-pizza';
+        deleteBtn.setAttribute('data-pizza-index', index);
+        deleteBtn.setAttribute('title', 'Eliminar esta pizza');
+        deleteBtn.innerHTML = `
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+        `;
+        deleteBtn.onclick = function() {
+            eliminarPizzaPersonalizada(index);
+        };
+        actionsDiv.appendChild(deleteBtn);
+        
+        contentDiv.appendChild(actionsDiv);
+        li.appendChild(contentDiv);
         orderSummary.appendChild(li);
 
         totalPrice += price;
@@ -1769,22 +1854,41 @@ function sendOrder() {
         // Crear descripción de la pizza personalizada
         let pizzaDescription = `1 ${name} ($${price.toFixed(2)}): `;
 
-        // Ingredientes seleccionados con ubicación
+        // Ingredientes seleccionados con ubicación - Agrupados por ubicación
         if (ingredientes.length > 0) {
             if (ingredientesConUbicacion) {
-                const ingredientesConUbicacionTexto = ingredientes.map(ing => {
+                // Agrupar ingredientes por ubicación
+                const ingredientesToda = [];
+                const ingredientesIzquierda = [];
+                const ingredientesDerecha = [];
+                
+                ingredientes.forEach(ing => {
                     const ubicacion = ingredientesConUbicacion[ing];
-                    let ubicacionTexto = '';
-                    // Solo mostrar ubicación si es en mitad izquierda o derecha
                     if (ubicacion === 'izquierda') {
-                        ubicacionTexto = ' en Mitad Izquierda';
+                        ingredientesIzquierda.push(ing);
                     } else if (ubicacion === 'derecha') {
-                        ubicacionTexto = ' en Mitad Derecha';
+                        ingredientesDerecha.push(ing);
+                    } else {
+                        ingredientesToda.push(ing);
                     }
-                    // Si es "toda", no agregar texto de ubicación
-                    return `${ing}${ubicacionTexto}`;
                 });
-                pizzaDescription += `con ${ingredientesConUbicacionTexto.join(', ')}`;
+                
+                // Construir descripción agrupada con saltos de línea
+                const partes = [];
+                
+                if (ingredientesToda.length > 0) {
+                    partes.push(`Toda la pizza: ${ingredientesToda.join(', ')}`);
+                }
+                
+                if (ingredientesIzquierda.length > 0) {
+                    partes.push(`Mitad Izquierda: ${ingredientesIzquierda.join(', ')}`);
+                }
+                
+                if (ingredientesDerecha.length > 0) {
+                    partes.push(`Mitad Derecha: ${ingredientesDerecha.join(', ')}`);
+                }
+                
+                pizzaDescription += partes.join('\n    ');
                 
                 // Verificar si es solo Pepperoni en mitad izquierda o derecha
                 const esSoloPepperoniEnMitad = ingredientes.length === 1 && 
